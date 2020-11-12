@@ -37,7 +37,7 @@ class Board:
         row = ""
         print("Move cost " + str(self.cost))
         print("Goal State 1: " + str(self.isGoal(2, 4, [1, 2, 3, 4, 5, 6, 7, 0])))
-        print("Goal State 1: " + str(self.isGoal(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])))
+        print("Goal State 2: " + str(self.isGoal(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])))
         # if self.parent != None:
         #     print("Parent " + str(self.parent.PrintBoard()))
         for y in self.game_board:
@@ -130,7 +130,7 @@ class Board:
         print("")
         print("")
         print("------------------------------")
-        print("NEW STEP")
+        print("NEW STATE")
         print("------------------------------")
         print("PARENT BOARD")
         self.PrintBoard()
@@ -157,7 +157,8 @@ board4 = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
 
 newboards = board.calculateSuccessors()
 
-for i in newboards:
-    i.calculateSuccessors()
+second_newboards = newboards[4].calculateSuccessors()
+
+# second_newboards[1].calculateSuccessors()
 
 # print(board.isGoal(2, 4, [4, 2, 3, 1, 5, 6, 0, 7]))

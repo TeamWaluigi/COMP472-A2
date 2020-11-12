@@ -150,15 +150,15 @@ class Board:
         return boards
 
 
-board = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
-board2 = Board(2, 4, [1, 2, 3, 5, 0, 6, 7, 4])
-board3 = Board(2, 4, [4, 2, 3, 1, 5, 6, 0, 7])
-board4 = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
-
-newboards = board.calculateSuccessors()
-
-second_newboards = newboards[4].calculateSuccessors()
-
-# second_newboards[1].calculateSuccessors()
-
-# print(board.isGoal(2, 4, [4, 2, 3, 1, 5, 6, 0, 7]))
+# board = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
+# board2 = Board(2, 4, [1, 2, 3, 5, 0, 6, 7, 4])
+# board3 = Board(2, 4, [4, 2, 3, 1, 5, 6, 0, 7])
+# board4 = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
+#
+# newboards = board.calculateSuccessors()
+#
+# second_newboards = newboards[4].calculateSuccessors()
+#
+#  second_newboards[1].calculateSuccessors()
+#
+#  print(board.isGoal(2, 4, [4, 2, 3, 1, 5, 6, 0, 7]))

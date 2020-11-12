@@ -159,6 +159,6 @@ class Board:
 #
 # second_newboards = newboards[4].calculateSuccessors()
 #
-#  second_newboards[1].calculateSuccessors()
+# second_newboards[1].calculateSuccessors()
 #
-#  print(board.isGoal(2, 4, [4, 2, 3, 1, 5, 6, 0, 7]))
+# print(board.isGoal(2, 4, [4, 2, 3, 1, 5, 6, 0, 7]))

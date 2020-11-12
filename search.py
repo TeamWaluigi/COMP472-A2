@@ -57,7 +57,7 @@ Board(2, 4, [4, 2, 3, 1, 5, 6, 0, 7], 1, parent_board),
 
 child_boards2 = [
 Board(2, 4, [4, 2, 0, 1, 5, 6, 3, 7], 1, child_boards1[4]),
-Board(2, 4, [4, 2, 3, 1, 5, 6, 0, 7], 1, child_boards1[4]),
+Board(2, 4, [4, 2, 3, 1, 5, 0, 6, 7], 1, child_boards1[4]),
 Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0], 1, child_boards1[4]),
 ]
 

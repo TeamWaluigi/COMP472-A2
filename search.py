@@ -14,8 +14,16 @@ class Search:
 
     def AddNewChildren(self, new_boards):
         for board in new_boards:
-            self.unvisited.append(board)
+            flag = True
+            for existing_board in self.unvisited:
+                if board.equals(existing_board):
+                    flag = False
+            print(flag)
+            if flag:
+                self.unvisited.append(board)
         self.RefreshUnvisited()
+
+
 
     def RefreshUnvisited(self):
         visited = self.visited

@@ -35,15 +35,15 @@ class Board:
 
     def PrintBoard(self):
         row = ""
-        print("Move cost " + str(self.cost))
-        print("Goal State 1: " + str(self.isGoal(2, 4, [1, 2, 3, 4, 5, 6, 7, 0])))
-        print("Goal State 2: " + str(self.isGoal(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])))
+        # print("Move cost " + str(self.cost))
+        # print("Goal State 1: " + str(self.isGoal(2, 4, [1, 2, 3, 4, 5, 6, 7, 0])))
+        # print("Goal State 2: " + str(self.isGoal(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])))
         # if self.parent != None:
         #     print("Parent " + str(self.parent.PrintBoard()))
         for y in self.game_board:
             for i in y:
                 row = row + " | " + str(i)
-            print(row)
+            # print(row)
             row = ""
 
     def piecePosition(self, piece):
@@ -106,8 +106,8 @@ class Board:
         if column + 1 < self.column:
             moves.append(Move(row, column + 1, row, column, 1))
 
-        for i in moves:
-            i.printMoves()
+        # for i in moves:
+            # i.printMoves()
 
         return moves
 
@@ -127,25 +127,25 @@ class Board:
     def calculateSuccessors(self):
         boards = []
         moves = self.calculateMoves()
-        print("")
-        print("")
-        print("------------------------------")
-        print("NEW STATE")
-        print("------------------------------")
-        print("PARENT BOARD")
-        self.PrintBoard()
+        # print("")
+        # print("")
+        # print("------------------------------")
+        # print("NEW STATE")
+        # print("------------------------------")
+        # print("PARENT BOARD")
+        # self.PrintBoard()
         current_board = self.returnBoard()
-        print("------------------------------")
-        print("MOVES")
-        print("------------------------------")
+        # print("------------------------------")
+        # print("MOVES")
+        # print("------------------------------")
         for i in moves:
             new_board = Board(self.row, self.column, current_board, i.cost, self)
             temp = new_board.game_board[i.get_row()][i.get_column()]
             new_board.game_board[i.get_zero_row()][i.get_zero_column()] = temp
             new_board.game_board[i.get_row()][i.get_column()] = 0
-            new_board.PrintBoard()
+            # new_board.PrintBoard()
             boards.append(new_board)
-            print("------------------------------")
+            # print("------------------------------")
 
         return boards
 

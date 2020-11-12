@@ -4,13 +4,14 @@ import copy
 
 class Board:
 
-    def __init__(self, row, column, board, cost=0):
+    def __init__(self, row, column, board, cost=0, parent=None):
         row_count = 0
         column_count = 0
         self.cost = cost
         self.length = row * column - 1
         self.row = row
         self.column = column
+        self.parent = parent
         self.game_board = [[0 for i in range(column)] for i in range(row)]
         for i in board:
             self.game_board[row_count][column_count] = i
@@ -35,6 +36,10 @@ class Board:
     def PrintBoard(self):
         row = ""
         print("Move cost " + str(self.cost))
+        print("Goal State 1: " + str(self.isGoal(2, 4, [1, 2, 3, 4, 5, 6, 7, 0])))
+        print("Goal State 1: " + str(self.isGoal(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])))
+        # if self.parent != None:
+        #     print("Parent " + str(self.parent.PrintBoard()))
         for y in self.game_board:
             for i in y:
                 row = row + " | " + str(i)
@@ -55,9 +60,8 @@ class Board:
     def oppositeCorner(self):
         row, column = self.piecePosition(0)
         arrayPosition = self.length - (row * self.column + column)
-        column_count = 0
         row_count = 0
-        if arrayPosition - self.column > 3:
+        if arrayPosition - self.column >= 0:
             row_count += 1
             arrayPosition -= self.column
         column_count = arrayPosition
@@ -123,11 +127,19 @@ class Board:
     def calculateSuccessors(self):
         boards = []
         moves = self.calculateMoves()
+        print("")
+        print("")
+        print("------------------------------")
+        print("NEW STEP")
+        print("------------------------------")
+        print("PARENT BOARD")
         self.PrintBoard()
-        current_board = board.returnBoard()
+        current_board = self.returnBoard()
+        print("------------------------------")
+        print("MOVES")
         print("------------------------------")
         for i in moves:
-            new_board = Board(self.row, self.column, current_board, i.cost)
+            new_board = Board(self.row, self.column, current_board, i.cost, self)
             temp = new_board.game_board[i.get_row()][i.get_column()]
             new_board.game_board[i.get_zero_row()][i.get_zero_column()] = temp
             new_board.game_board[i.get_row()][i.get_column()] = 0
@@ -143,6 +155,9 @@ board2 = Board(2, 4, [1, 2, 3, 5, 0, 6, 7, 4])
 board3 = Board(2, 4, [4, 2, 3, 1, 5, 6, 0, 7])
 board4 = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
 
-board.calculateSuccessors()
+newboards = board.calculateSuccessors()
 
-print(board.isGoal(2, 4, [4, 2, 3, 1, 5, 6, 0, 7]))
+for i in newboards:
+    i.calculateSuccessors()
+
+# print(board.isGoal(2, 4, [4, 2, 3, 1, 5, 6, 0, 7]))

@@ -35,15 +35,15 @@ class Board:
 
     def PrintBoard(self):
         row = ""
-        # print("Move cost " + str(self.cost))
-        # print("Goal State 1: " + str(self.isGoal(2, 4, [1, 2, 3, 4, 5, 6, 7, 0])))
-        # print("Goal State 2: " + str(self.isGoal(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])))
+        print("Move cost " + str(self.cost))
+        print("Goal State 1: " + str(self.isGoal(2, 4, [1, 2, 3, 4, 5, 6, 7, 0])))
+        print("Goal State 2: " + str(self.isGoal(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])))
         # if self.parent != None:
         #     print("Parent " + str(self.parent.PrintBoard()))
         for y in self.game_board:
             for i in y:
                 row = row + " | " + str(i)
-            # print(row)
+            print(row)
             row = ""
 
     def piecePosition(self, piece):
@@ -71,40 +71,48 @@ class Board:
         row, column = self.piecePosition(0)
         moves = []
 
+        #     Right
+        if column + 1 < self.column:
+            moves.append(Move(row, column + 1, row, column, 1 + self.cost))
+        #     Left
+        if column - 1 > -1:
+            moves.append(Move(row, column - 1, row, column, 1 + self.cost))
+        # Up
+        if self.length > row - 1 + column >= 0 and row - 1 > -1:
+            moves.append(Move(row - 1, column, row, column, 1 + self.cost))
+        #     Down
+        if self.length > row + 1 + column >= 0 and row + 1 < self.row:
+            moves.append(Move(row + 1, column, row, column, 1 + self.cost))
+
         if self.IsCornerPiece(row, column):
-            # Absolute Diagonal Move
-            oppositeRow, oppositeColumn = self.oppositeCorner()
-            moves.append(Move(oppositeRow, oppositeColumn, row, column, 3))
 
             # End of Same Row Move
             if column == 0:
-                moves.append(Move(row, self.column - 1, row, column, 2))
+                moves.append(Move(row, self.column - 1, row, column, 2 + self.cost))
             elif column == self.column - 1:
-                moves.append(Move(row, 0, row, column, 2))
+                moves.append(Move(row, 0, row, column, 2 + self.cost))
 
             # Immediate Diagonal Moves
             # Up and to the right
             if row - 1 > -1 and column + 1 < self.column:
-                moves.append(Move(row - 1, column + 1, row, column, 3))
+                moves.append(Move(row - 1, column + 1, row, column, 3 + self.cost))
             # Up and to the left
             if row - 1 > -1 and column - 1 > -1:
-                moves.append(Move(row - 1, column - 1, row, column, 3))
+                moves.append(Move(row - 1, column - 1, row, column, 3 + self.cost))
             # Down and to the right
             if row + 1 < self.row and column + 1 < self.column:
-                moves.append(Move(row + 1, column + 1, row, column, 3))
+                moves.append(Move(row + 1, column + 1, row, column, 3 + self.cost))
             # Down and to the left
             if row + 1 < self.row and column - 1 > -1:
-                moves.append(Move(row + 1, column - 1, row, column, 3))
+                moves.append(Move(row + 1, column - 1, row, column, 3 + self.cost))
 
-        if self.length > row - 1 + column >= 0 and row - 1 \
-                > -1:
-            moves.append(Move(row - 1, column, row, column, 1))
-        if self.length > row + 1 + column >= 0 and row + 1 < self.row:
-            moves.append(Move(row + 1, column, row, column, 1))
-        if column - 1 > -1:
-            moves.append(Move(row, column - 1, row, column, 1))
-        if column + 1 < self.column:
-            moves.append(Move(row, column + 1, row, column, 1))
+            # Absolute Diagonal Move
+            oppositeRow, oppositeColumn = self.oppositeCorner()
+            moves.append(Move(oppositeRow, oppositeColumn, row, column, 3 + self.cost))
+
+
+
+
 
         # for i in moves:
             # i.printMoves()
@@ -127,25 +135,19 @@ class Board:
     def calculateSuccessors(self):
         boards = []
         moves = self.calculateMoves()
-        # print("")
-        # print("")
-        # print("------------------------------")
-        # print("NEW STATE")
-        # print("------------------------------")
-        # print("PARENT BOARD")
-        # self.PrintBoard()
         current_board = self.returnBoard()
-        # print("------------------------------")
-        # print("MOVES")
-        # print("------------------------------")
+
         for i in moves:
             new_board = Board(self.row, self.column, current_board, i.cost, self)
-            temp = new_board.game_board[i.get_row()][i.get_column()]
-            new_board.game_board[i.get_zero_row()][i.get_zero_column()] = temp
-            new_board.game_board[i.get_row()][i.get_column()] = 0
-            # new_board.PrintBoard()
+            # temp = new_board.game_board[i.get_row()][i.get_column()]
+            # new_board.game_board[i.get_zero_row()][i.get_zero_column()] = temp
+            # new_board.game_board[i.get_row()][i.get_column()] = 0
+
+            #
+            new_board.game_board[i.get_zero_row()][i.get_zero_column()], new_board.game_board[i.get_row()][i.get_column()] = new_board.game_board[i.get_row()][i.get_column()], 0
+
+
             boards.append(new_board)
-            # print("------------------------------")
 
         return boards
 
@@ -158,6 +160,8 @@ class Board:
 # newboards = board.calculateSuccessors()
 #
 # second_newboards = newboards[4].calculateSuccessors()
+#
+# second_newboards[0].PrintBoard()
 #
 # second_newboards[1].calculateSuccessors()
 #

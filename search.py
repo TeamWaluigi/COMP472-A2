@@ -10,20 +10,24 @@ class Search:
 
     def visit(self, board):
         self.visited.append(board)
-        self.RefreshUnvisited()
+        for existing_board in self.unvisited:
+            if board.equals(existing_board):
+                self.unvisited.remove(existing_board)
 
     def AddNewChildren(self, new_boards):
         for board in new_boards:
             flag = True
             for existing_board in self.unvisited:
                 if board.equals(existing_board):
+                    if board.cost < existing_board.cost:
+                        self.unvisited.remove(existing_board)
+                        self.AddChild(board)
                     flag = False
-            print(flag)
+            for existing_board in self.visited:
+                if board.equals(existing_board):
+                    flag = False
             if flag:
-                self.unvisited.append(board)
-        self.RefreshUnvisited()
-
-
+                self.AddChild(board)
 
     def RefreshUnvisited(self):
         visited = self.visited
@@ -32,6 +36,13 @@ class Search:
             for unvisited_board in unvisited:
                 if visited_board.equals(unvisited_board):
                     self.unvisited.remove(unvisited_board)
+
+    def AddChild(self, board):
+        for count in range(len(self.unvisited)):
+            if board.cost <= self.unvisited[count].cost:
+                self.unvisited.insert(count, board)
+                return
+        self.unvisited.append(board)
 
     def SortByMoveCost(self):
         for i in range(len(self.unvisited)):
@@ -52,29 +63,28 @@ class Search:
         print("")
         print("")
 
-
-parent_board = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
-
-child_boards1 = [
-Board(2, 4, [0, 2, 3, 1, 5, 6, 7, 4], 3, parent_board),
-Board(2, 4, [4, 2, 3, 1, 0, 6, 7, 5], 2, parent_board),
-Board(2, 4, [4, 2, 0, 1, 5, 6, 7, 3], 3, parent_board),
-Board(2, 4, [4, 2, 3, 0, 5, 6, 7, 1], 1, parent_board),
-Board(2, 4, [4, 2, 3, 1, 5, 6, 0, 7], 1, parent_board),
-]
-
-child_boards2 = [
-Board(2, 4, [4, 2, 0, 1, 5, 6, 3, 7], 1, child_boards1[4]),
-Board(2, 4, [4, 2, 3, 1, 5, 0, 6, 7], 1, child_boards1[4]),
-Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0], 1, child_boards1[4]),
-]
-
-search = Search(parent_board)
-search.AddNewChildren(child_boards1)
-search.PrintLists()
-search.visit(Board(2, 4, [4, 2, 3, 1, 5, 6, 0, 7]))
-search.AddNewChildren(child_boards2)
-search.PrintLists()
-search.SortByMoveCost()
-search.PrintLists()
-
+#
+# parent_board = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
+#
+# child_boards1 = [
+# Board(2, 4, [0, 2, 3, 1, 5, 6, 7, 4], 3, parent_board),
+# Board(2, 4, [4, 2, 3, 1, 0, 6, 7, 5], 2, parent_board),
+# Board(2, 4, [4, 2, 0, 1, 5, 6, 7, 3], 3, parent_board),
+# Board(2, 4, [4, 2, 3, 0, 5, 6, 7, 1], 1, parent_board),
+# Board(2, 4, [4, 2, 3, 1, 5, 6, 0, 7], 1, parent_board),
+# ]
+#
+# child_boards2 = [
+# Board(2, 4, [4, 2, 0, 1, 5, 6, 3, 7], 1, child_boards1[4]),
+# Board(2, 4, [4, 2, 3, 1, 5, 0, 6, 7], 1, child_boards1[4]),
+# Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0], 1, child_boards1[4]),
+# ]
+#
+# search = Search(parent_board)
+# search.AddNewChildren(child_boards1)
+# search.PrintLists()
+# search.visit(Board(2, 4, [4, 2, 3, 1, 5, 6, 0, 7]))
+# search.AddNewChildren(child_boards2)
+# search.PrintLists()
+# search.SortByMoveCost()
+# search.PrintLists()

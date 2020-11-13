@@ -44,6 +44,7 @@ class Search:
                 return
         self.unvisited.append(board)
 
+    # Extremely high cost n^2, avoid
     def SortByMoveCost(self):
         for i in range(len(self.unvisited)):
             for j in range(len(self.unvisited) - 1):

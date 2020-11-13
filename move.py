@@ -1,11 +1,12 @@
 class Move:
 
-    def __init__(self, row, column, ZeroRow, ZeroColumn, cost=0):
+    def __init__(self, row, column, ZeroRow, ZeroColumn, cost=0, total_cost=0):
         self.row = row
         self.column = column
         self.ZeroRow = ZeroRow
         self.ZeroColumn = ZeroColumn
         self.cost = cost
+        self.total_cost = total_cost
 
     def printMoves(self):
         print("Move from (" + str(self.ZeroRow) + "," + str(self.ZeroColumn) + ") to (" + str(self.row) + ","

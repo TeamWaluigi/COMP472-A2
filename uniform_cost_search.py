@@ -1,6 +1,24 @@
 from board import Board
 from search import Search
-import time
+
+from search_algorithm import SearchAlgorithmInterface
+
+
+class UniformCostSearch(SearchAlgorithmInterface):
+    def solve(self, board):
+        current_view = board
+        current_view.print_board()
+        search = Search(board)
+        while not current_view.is_goal(2, 4, goal1) and not current_view.is_goal(2, 4, goal2):
+            children = current_view.calculate_successors()
+            search.add_new_children(children)
+            if len(search.unvisited) > 0:
+                current_view = search.unvisited.pop(0)
+                search.visited.append(current_view)
+        print(search.unvisited.__len__())
+        print(search.visited.__len__())
+        return current_view
+
 
 parent_board = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
 parent_board2 = Board(2, 4, [4, 2, 3, 1, 5, 6, 7, 0])
@@ -11,35 +29,13 @@ parent_board6 = Board(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])
 parent_board7 = Board(2, 4, [0, 3, 7, 5, 2, 6, 1, 4])
 parent_board8 = Board(2, 4, [1, 0, 3, 7, 5, 2, 6, 4])
 
-currentview = parent_board
 goal1 = [1, 2, 3, 4, 5, 6, 7, 0]
 goal2 = [1, 3, 5, 7, 2, 4, 6, 0]
 
+uniform_cost_search = UniformCostSearch()
 
-def findGoalState(board):
-    start = time.time()
-    currentview = board
-    currentview.PrintBoard()
-    search = Search(board)
-    while not currentview.isGoal(2, 4, goal1) and not currentview.isGoal(2, 4, goal2):
-        children = currentview.calculateSuccessors()
-        search.AddNewChildren(children)
-        if len(search.unvisited) > 0:
-            currentview = search.unvisited.pop(0)
-            search.visited.append(currentview)
-    print(search.unvisited.__len__())
-    print(search.visited.__len__())
-    end = time.time()
-    print(end - start)
-    return currentview
-
-
-
-
-
-
-goalstate = findGoalState(parent_board)
+goal_state = uniform_cost_search.solve_timed(parent_board)
 print("----------------------")
 print("----------------------")
-goalstate.PrintBoard()
+goal_state.print_board()
 

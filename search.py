@@ -3,7 +3,11 @@ from board import Board
 
 class Search:
 
-    def __init__(self, board, visited=[], unvisited=[]):
+    def __init__(self, board, visited=None, unvisited=None):
+        if unvisited is None:
+            unvisited = []
+        if visited is None:
+            visited = []
         self.visited = visited
         self.visited.append(board)
         self.unvisited = unvisited
@@ -14,22 +18,22 @@ class Search:
             if board.equals(existing_board):
                 self.unvisited.remove(existing_board)
 
-    def AddNewChildren(self, new_boards):
+    def add_new_children(self, new_boards):
         for board in new_boards:
             flag = True
             for existing_board in self.unvisited:
                 if board.equals(existing_board):
                     if board.cost < existing_board.cost:
                         self.unvisited.remove(existing_board)
-                        self.AddChild(board)
+                        self.add_child(board)
                     flag = False
             for existing_board in self.visited:
                 if board.equals(existing_board):
                     flag = False
             if flag:
-                self.AddChild(board)
+                self.add_child(board)
 
-    def RefreshUnvisited(self):
+    def refresh_unvisited(self):
         visited = self.visited
         unvisited = self.unvisited
         for visited_board in visited:
@@ -37,7 +41,7 @@ class Search:
                 if visited_board.equals(unvisited_board):
                     self.unvisited.remove(unvisited_board)
 
-    def AddChild(self, board):
+    def add_child(self, board):
         for count in range(len(self.unvisited)):
             if board.cost <= self.unvisited[count].cost:
                 self.unvisited.insert(count, board)
@@ -45,20 +49,20 @@ class Search:
         self.unvisited.append(board)
 
     # Extremely high cost n^2, avoid
-    def SortByMoveCost(self):
+    def sort_by_move_cost(self):
         for i in range(len(self.unvisited)):
             for j in range(len(self.unvisited) - 1):
                 if self.unvisited[j].cost > self.unvisited[j + 1].cost:
                     self.unvisited[j], self.unvisited[j + 1] = self.unvisited[j + 1], self.unvisited[j]
 
-    def PrintLists(self):
+    def print_lists(self):
         print("------------------------------")
         print("Visited:")
         for board in self.visited:
-            print(board.returnBoard())
+            print(board.return_board())
         print("Unvisited")
         for board in self.unvisited:
-            print(board.returnBoard())
+            print(board.return_board())
         print("------------------------------")
         print("")
         print("")

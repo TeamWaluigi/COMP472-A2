@@ -1,5 +1,4 @@
 from move import Move
-import copy
 
 
 class Board:
@@ -20,24 +19,24 @@ class Board:
                 column_count = 0
                 row_count += 1
 
-    def returnBoard(self):
+    def return_board(self):
         board = []
         for y in self.game_board:
             for i in y:
                 board.append(i)
         return board
 
-    def IsCornerPiece(self, row, column):
+    def is_corner_piece(self, row, column):
         if row == 0 or row == self.row - 1:
             if column == 0 or column == self.column - 1:
-                return True;
+                return True
         return False
 
-    def PrintBoard(self):
+    def print_board(self):
         row = ""
         print("Move cost " + str(self.cost))
-        print("Goal State 1: " + str(self.isGoal(2, 4, [1, 2, 3, 4, 5, 6, 7, 0])))
-        print("Goal State 2: " + str(self.isGoal(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])))
+        print("Goal State 1: " + str(self.is_goal(2, 4, [1, 2, 3, 4, 5, 6, 7, 0])))
+        print("Goal State 2: " + str(self.is_goal(2, 4, [1, 3, 5, 7, 2, 4, 6, 0])))
         # if self.parent != None:
         #     print("Parent " + str(self.parent.PrintBoard()))
         for y in self.game_board:
@@ -46,7 +45,7 @@ class Board:
             print(row)
             row = ""
 
-    def piecePosition(self, piece):
+    def piece_position(self, piece):
         row_count = 0
         column_count = 0
         for y in self.game_board:
@@ -57,18 +56,18 @@ class Board:
             column_count = 0
             row_count += 1
 
-    def oppositeCorner(self):
-        row, column = self.piecePosition(0)
-        arrayPosition = self.length - (row * self.column + column)
+    def opposite_corner(self):
+        row, column = self.piece_position(0)
+        array_position = self.length - (row * self.column + column)
         row_count = 0
-        if arrayPosition - self.column >= 0:
+        if array_position - self.column >= 0:
             row_count += 1
-            arrayPosition -= self.column
-        column_count = arrayPosition
+            array_position -= self.column
+        column_count = array_position
         return row_count, column_count
 
-    def calculateMoves(self):
-        row, column = self.piecePosition(0)
+    def calculate_moves(self):
+        row, column = self.piece_position(0)
         moves = []
 
         #     Right
@@ -84,7 +83,7 @@ class Board:
         if self.length > row + 1 + column >= 0 and row + 1 < self.row:
             moves.append(Move(row + 1, column, row, column, 1 + self.cost))
 
-        if self.IsCornerPiece(row, column):
+        if self.is_corner_piece(row, column):
 
             # End of Same Row Move
             if column == 0:
@@ -107,21 +106,17 @@ class Board:
                 moves.append(Move(row + 1, column - 1, row, column, 3 + self.cost))
 
             # Absolute Diagonal Move
-            oppositeRow, oppositeColumn = self.oppositeCorner()
-            moves.append(Move(oppositeRow, oppositeColumn, row, column, 3 + self.cost))
-
-
-
-
+            opposite_row, opposite_column = self.opposite_corner()
+            moves.append(Move(opposite_row, opposite_column, row, column, 3 + self.cost))
 
         # for i in moves:
             # i.printMoves()
 
         return moves
 
-    def isGoal(self, row, column, board):
-        newBoard = Board(row, column, board)
-        return self.equals(newBoard)
+    def is_goal(self, row, column, board):
+        new_board = Board(row, column, board)
+        return self.equals(new_board)
 
     def equals(self, board2):
         rows = len(self.game_board)
@@ -132,10 +127,10 @@ class Board:
                     return False
         return True
 
-    def calculateSuccessors(self):
+    def calculate_successors(self):
         boards = []
-        moves = self.calculateMoves()
-        current_board = self.returnBoard()
+        moves = self.calculate_moves()
+        current_board = self.return_board()
 
         for i in moves:
             new_board = Board(self.row, self.column, current_board, i.cost, self)
@@ -143,9 +138,7 @@ class Board:
             # new_board.game_board[i.get_zero_row()][i.get_zero_column()] = temp
             # new_board.game_board[i.get_row()][i.get_column()] = 0
 
-            #
             new_board.game_board[i.get_zero_row()][i.get_zero_column()], new_board.game_board[i.get_row()][i.get_column()] = new_board.game_board[i.get_row()][i.get_column()], 0
-
 
             boards.append(new_board)
 

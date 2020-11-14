@@ -61,13 +61,26 @@ class Board:
                 return True
         return False
 
-    def print_board(self):
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __eq__(self, other):
+        return self.equals(other)
+
+    def __str__(self):
+        representation = ""
         row_string = ""
+
         for row in self.tiles:
             for tile in row:
                 row_string = row_string + " | " + str(tile)
-            print(row_string)
+            representation += row_string + "\n"
             row_string = ""
+
+        return representation
+
+    def print_board(self):
+        print(self)
 
     def get_tile_position(self, desired_tile):
         row_count = 0

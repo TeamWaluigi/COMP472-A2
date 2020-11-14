@@ -49,21 +49,3 @@ def manhattan_distance(board: Board, board_goal: Board) -> int:
 
     return score
 
-initial_board = Board([4, 2, 3, 1, 5, 6, 7, 0])
-initial_board2 = Board([4, 2, 3, 1, 5, 6, 7, 0])
-initial_board3 = Board([1, 0, 3, 7, 5, 2, 6, 4])
-initial_board4 = Board([3, 2, 5, 1, 6, 4, 7, 0])
-initial_board5 = Board([1, 2, 0, 3, 5, 6, 7, 4])
-initial_board6 = Board([1, 3, 5, 7, 2, 4, 6, 0])
-initial_board7 = Board([0, 3, 7, 5, 2, 6, 1, 4])
-initial_board8 = Board([1, 0, 3, 7, 5, 2, 6, 4])
-initial_board9 = Board(rows=3, columns=3, raw_board=[1, 7, 3, 4, 5, 6, 2, 8, 0])  # Breaks for now
-
-test_board = initial_board
-
-test_board.print_board()
-print(h1(test_board))
-print(h2(test_board))
-
-print("----------------------")
-print("Completed Board-----------------")

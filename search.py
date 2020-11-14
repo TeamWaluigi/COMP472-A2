@@ -48,12 +48,9 @@ class Search:
                 return
         self.unvisited.append(board)
 
-    # Extremely high cost n^2, avoid
+    # TODO may be convenient to use for other methods?
     def sort_by_move_cost(self):
-        for i in range(len(self.unvisited)):
-            for j in range(len(self.unvisited) - 1):
-                if self.unvisited[j].cost > self.unvisited[j + 1].cost:
-                    self.unvisited[j], self.unvisited[j + 1] = self.unvisited[j + 1], self.unvisited[j]
+        self.unvisited.sort(key=lambda move: move.cost)
 
     def print_lists(self):
         print("------------------------------")

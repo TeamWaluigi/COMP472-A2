@@ -5,7 +5,7 @@ from queue import PriorityQueue
 from search_algorithm import SearchAlgorithmInterface
 
 
-class GreedyBestSearch(SearchAlgorithmInterface):
+class AStarSearch(SearchAlgorithmInterface):
 
     def __init__(self, heuristic_func=h1):
         self.open = PriorityQueue()
@@ -31,7 +31,8 @@ class GreedyBestSearch(SearchAlgorithmInterface):
                     continue  # TODO this should be changed, right?
                 if any(child.equals(node[1]) for node in self.open.queue):
                     continue  # TODO this should be changed, right?
-                self.open.put((self.heuristic_func(child), child))
+                priority = self.heuristic_func(child) + child.cost
+                self.open.put((priority, child))
 
             current_board = self.open.get()[1]
 
@@ -59,6 +60,6 @@ initial_board8 = Board([3, 0, 1, 4, 2, 6, 5, 7])
 initial_board9 = Board(rows=3, columns=3, raw_board=[2, 5, 3, 4, 6, 0, 7, 8, 1])
 initial_board10 = Board(rows=3, columns=3, raw_board=[2, 0, 7, 4, 6, 5, 8, 3, 1])
 
-greedy_best_search = GreedyBestSearch()
+a_star_search = AStarSearch()
 
-goal_state = greedy_best_search.solve_timed(initial_board8)
+goal_state = a_star_search.solve_timed(initial_board8)

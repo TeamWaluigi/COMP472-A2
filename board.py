@@ -80,87 +80,98 @@ class Board:
             column_count = 0
             row_count += 1
 
-    def get_opposite_corner_tile_position(self):
-        row, column = self.get_tile_position(0)
-        array_position = self.length - (row * self.columns + column)
-        row_count = 0
-        if array_position - self.columns >= 0:
-            row_count += 1
-            array_position -= self.columns
-        column_count = array_position
-        return row_count, column_count
-
-    def calculate_moves(self):
+    def get_moves(self):
         row, column = self.get_tile_position(0)
         moves = []
 
-        #     Right
+        # Right
         if column + 1 < self.columns:
             moves.append(Move(row, column + 1, row, column, 1 + self.cost))
-        #     Left
-        if column - 1 > -1:
+        # Left
+        if column > 0:
             moves.append(Move(row, column - 1, row, column, 1 + self.cost))
         # Up
-        if self.length > row - 1 + column >= 0 and row - 1 > -1:
+        if row > 0:
             moves.append(Move(row - 1, column, row, column, 1 + self.cost))
-        #     Down
-        if self.length > row + 1 + column >= 0 and row + 1 < self.rows:
+        # Down
+        if row + 1 < self.rows:
             moves.append(Move(row + 1, column, row, column, 1 + self.cost))
 
         if self.is_corner_piece(row, column):
 
-            # End of Same Row Move
-            if column == 0:
-                moves.append(Move(row, self.columns - 1, row, column, 2 + self.cost))
-            elif column == self.columns - 1:
-                moves.append(Move(row, 0, row, column, 2 + self.cost))
+            # Wrapping Moves
+            if self.columns > 2:
+                # Wrap Left
+                if column == 0:
+                    moves.append(Move(row, self.columns - 1, row, column, 2 + self.cost))
+
+                # Wrap Right
+                if column == self.columns - 1:
+                    moves.append(Move(row, 0, row, column, 2 + self.cost))
+
+            if self.rows > 2:
+                # Wrap Up
+                if row == 0:
+                    moves.append(Move(self.rows - 1, column, row, column, 2 + self.cost))
+
+                # Wrap Down
+                if row == self.columns - 1:
+                    moves.append(Move(0, column, row, column, 2 + self.cost))
 
             # Immediate Diagonal Moves
             # Up and to the right
-            if row - 1 > -1 and column + 1 < self.columns:
+            if row > 0 and column + 1 < self.columns:
                 moves.append(Move(row - 1, column + 1, row, column, 3 + self.cost))
             # Up and to the left
-            if row - 1 > -1 and column - 1 > -1:
+            if row > 0 and column > 0:
                 moves.append(Move(row - 1, column - 1, row, column, 3 + self.cost))
             # Down and to the right
             if row + 1 < self.rows and column + 1 < self.columns:
                 moves.append(Move(row + 1, column + 1, row, column, 3 + self.cost))
             # Down and to the left
-            if row + 1 < self.rows and column - 1 > -1:
+            if row + 1 < self.rows and column > 0:
                 moves.append(Move(row + 1, column - 1, row, column, 3 + self.cost))
 
-            # Absolute Diagonal Move
-            opposite_row, opposite_column = self.get_opposite_corner_tile_position()
-            moves.append(Move(opposite_row, opposite_column, row, column, 3 + self.cost))
-
-        # for i in moves:
-        # i.printMoves()
+            # Opposite Corner Move
+            if row == 0:
+                # From Top Left
+                if column == 0:
+                    moves.append(Move(self.rows - 1, self.columns - 1, row, column, 3 + self.cost))
+                # From Top Right
+                else:
+                    moves.append(Move(self.rows - 1, 0, row, column, 3 + self.cost))
+            else:
+                # From Bottom Left
+                if column == 0:
+                    moves.append(Move(0, self.columns - 1, row, column, 3 + self.cost))
+                # From Bottom Right
+                else:
+                    moves.append(Move(0, 0, row, column, 3 + self.cost))
 
         return moves
 
     def equals(self, other_board):
-        rows = len(self.tiles)
-        columns = len(self.tiles[0])
-        for row in range(rows):
-            for column in range(columns):
+        for row in range(self.rows):
+            for column in range(self.columns):
                 if self.tiles[row][column] != other_board.tiles[row][column]:
                     return False
         return True
 
-    def calculate_successors(self):
-        boards = []
-        moves = self.calculate_moves()
-        current_board = self.raw_board()
+    def get_successors(self):
+        successors = []
+        moves = self.get_moves()
+        raw_board = self.raw_board()
 
-        for i in moves:
-            new_board = Board(rows=self.rows, columns=self.columns, raw_board=current_board, cost=i.cost, parent=self)
-            # temp = new_board.game_board[i.get_row()][i.get_column()]
-            # new_board.game_board[i.get_zero_row()][i.get_zero_column()] = temp
-            # new_board.game_board[i.get_row()][i.get_column()] = 0
+        for move in moves:
+            successor = Board(rows=self.rows, columns=self.columns, raw_board=raw_board, cost=move.cost, parent=self)
 
-            new_board.tiles[i.get_zero_row()][i.get_zero_column()], new_board.tiles[i.get_row()][
-                i.get_column()] = new_board.tiles[i.get_row()][i.get_column()], 0
+            zero_row = move.get_zero_row()
+            zero_column = move.get_zero_column()
+            move_row = move.get_row()
+            move_column = move.get_column()
+            successor.tiles[zero_row][zero_column], successor.tiles[move_row][move_column] = \
+                successor.tiles[move_row][move_column], 0
 
-            boards.append(new_board)
+            successors.append(successor)
 
-        return boards
+        return successors

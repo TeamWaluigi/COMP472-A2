@@ -17,7 +17,7 @@ class UniformCostSearch(SearchAlgorithmInterface):
         search = Search(board)
 
         while not current_board.equals(goal_1) and not current_board.equals(goal_2):
-            children = current_board.calculate_successors()
+            children = current_board.get_successors()
             search.add_new_children(children)
             if len(search.unvisited) > 0:
                 current_board = search.unvisited.pop(0)
@@ -36,14 +36,11 @@ initial_board5 = Board([1, 2, 0, 3, 5, 6, 7, 4])
 initial_board6 = Board([1, 3, 5, 7, 2, 4, 6, 0])
 initial_board7 = Board([0, 3, 7, 5, 2, 6, 1, 4])
 initial_board8 = Board([1, 0, 3, 7, 5, 2, 6, 4])
-initial_board9 = Board(rows=3, columns=3, raw_board=[1, 7, 3, 4, 5, 6, 2, 8, 0])  # Breaks for now
-
-goal1 = [1, 2, 3, 4, 5, 6, 7, 0]
-goal2 = [1, 3, 5, 7, 2, 4, 6, 0]
+initial_board9 = Board(rows=3, columns=3, raw_board=[2, 5, 3, 4, 6, 0, 7, 8, 1])  # Breaks for now
 
 uniform_cost_search = UniformCostSearch()
 
-goal_state = uniform_cost_search.solve_timed(initial_board)
+goal_state = uniform_cost_search.solve_timed(initial_board9)
 print("----------------------")
 print("Completed Board-----------------")
 goal_state.print_board()

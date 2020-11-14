@@ -59,10 +59,10 @@ class Search:
         print("------------------------------")
         print("Visited:")
         for board in self.visited:
-            print(board.return_board())
+            print(board.raw_board())
         print("Unvisited")
         for board in self.unvisited:
-            print(board.return_board())
+            print(board.raw_board())
         print("------------------------------")
         print("")
         print("")

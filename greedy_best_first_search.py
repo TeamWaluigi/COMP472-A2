@@ -1,3 +1,5 @@
+import time
+
 from board import Board, get_goal_1, get_goal_2
 from heuristics import h1
 from queue import PriorityQueue
@@ -17,7 +19,9 @@ class GreedyBestSearch(SearchAlgorithmInterface):
         print(starting_board)  # For debug
         current_board = starting_board
         current_board.parent = None
-        self.open.put((0, current_board))
+        self.open.put((0, time.time(), current_board))
+        # if h(n) are equal, arbitrary selection instead of comparing
+        # cost (here, based on time)
 
         goal_1 = get_goal_1(rows=starting_board.rows, columns=starting_board.columns)
         goal_2 = get_goal_2(rows=starting_board.rows, columns=starting_board.columns)
@@ -28,12 +32,14 @@ class GreedyBestSearch(SearchAlgorithmInterface):
             children = current_board.get_successors()
             for child in children:
                 if child in self.closed:
-                    continue  # TODO this should be changed, right?
-                if any(child.equals(node[1]) for node in self.open.queue):
-                    continue  # TODO this should be changed, right?
-                self.open.put((self.heuristic_func(child), child))
+                    continue  # we don't care to replace here, since we don't consider cost g(n)
+                if any(child.equals(node[2]) for node in self.open.queue):
+                    continue  # we don't care to replace here, since we don't consider cost g(n)
+                self.open.put((self.heuristic_func(child), time.time(), child))
+                # again, if h(n) are equal, arbitrary selection instead of comparing
+                # cost (here, based on time)
 
-            current_board = self.open.get()[1]
+            current_board = self.open.get()[2]
 
         solved_board = current_board
         print("Solved board state: ")
@@ -61,4 +67,4 @@ initial_board10 = Board(rows=3, columns=3, raw_board=[2, 0, 7, 4, 6, 5, 8, 3, 1]
 
 greedy_best_search = GreedyBestSearch()
 
-goal_state = greedy_best_search.solve_timed(initial_board8)
+goal_state = greedy_best_search.solve_timed(initial_board9)

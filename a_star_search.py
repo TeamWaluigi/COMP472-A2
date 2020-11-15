@@ -17,7 +17,7 @@ class AStarSearch(SearchAlgorithmInterface):
         print(starting_board)  # For debug
         current_board = starting_board
         current_board.parent = None
-        self.open.put((0, current_board))
+        self.open.put((self.heuristic_func(current_board), current_board))
 
         goal_1 = get_goal_1(rows=starting_board.rows, columns=starting_board.columns)
         goal_2 = get_goal_2(rows=starting_board.rows, columns=starting_board.columns)

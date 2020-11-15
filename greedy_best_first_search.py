@@ -19,7 +19,7 @@ class GreedyBestSearch(SearchAlgorithmInterface):
         print(starting_board)  # For debug
         current_board = starting_board
         current_board.parent = None
-        self.open.put((0, time.time(), current_board))
+        self.open.put((self.heuristic_func(current_board), time.time(), current_board))
         # if h(n) are equal, arbitrary selection instead of comparing
         # cost (here, based on time)
 

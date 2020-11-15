@@ -1,6 +1,13 @@
 from board import Board, get_goal_1, get_goal_2
 
 
+# As required
+def h0(board: Board) -> int:
+    if board.tiles[board.rows - 1][board.columns - 1] == 0:
+        return 0
+    return 1
+
+
 def h1(board: Board) -> int:
     hamming_distance_goal_1 = hamming_distance(board, get_goal_1(rows=board.rows, columns=board.columns))
     hamming_distance_goal_2 = hamming_distance(board, get_goal_2(rows=board.rows, columns=board.columns))
@@ -48,4 +55,3 @@ def manhattan_distance(board: Board, board_goal: Board) -> int:
             score += abs(actual_row - goal_row) + abs(actual_column - goal_column)
 
     return score
-

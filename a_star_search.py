@@ -1,5 +1,5 @@
 from board import Board, get_goal_1, get_goal_2
-from heuristics import h1
+from heuristics import h0, h1, h2
 from queue import PriorityQueue
 
 from search_algorithm import SearchAlgorithmInterface
@@ -7,7 +7,7 @@ from search_algorithm import SearchAlgorithmInterface
 
 class AStarSearch(SearchAlgorithmInterface):
 
-    def __init__(self, heuristic_func=h1):
+    def __init__(self, heuristic_func=h0):
         self.open = PriorityQueue()
         self.closed = []
         self.heuristic_func = heuristic_func
@@ -28,10 +28,11 @@ class AStarSearch(SearchAlgorithmInterface):
             children = current_board.get_successors()
             for child in children:
                 if child in self.closed:
-                    continue  # TODO this should be changed, right?
+                    continue
                 if any(child.equals(node[1]) for node in self.open.queue):
-                    continue  # TODO this should be changed, right?
-                priority = self.heuristic_func(child) + child.cost
+                    # TODO Get that node, compare priorities, replace if needed
+                    continue
+                priority = self.get_node_priority(child)
                 self.open.put((priority, child))
 
             current_board = self.open.get()[1]
@@ -47,6 +48,9 @@ class AStarSearch(SearchAlgorithmInterface):
 
         return solved_board
 
+    def get_node_priority(self, child):
+        return self.heuristic_func(child) + child.cost
+
 
 # Boards to test out
 initial_board = Board([4, 2, 3, 1, 5, 6, 7, 0])
@@ -60,6 +64,8 @@ initial_board8 = Board([3, 0, 1, 4, 2, 6, 5, 7])
 initial_board9 = Board(rows=3, columns=3, raw_board=[2, 5, 3, 4, 6, 0, 7, 8, 1])
 initial_board10 = Board(rows=3, columns=3, raw_board=[2, 0, 7, 4, 6, 5, 8, 3, 1])
 
-a_star_search = AStarSearch()
+a_star_search_h0 = AStarSearch()  # Default is h0
+a_star_search_h1 = AStarSearch(heuristic_func=h1)
+a_star_search_h2 = AStarSearch(heuristic_func=h2)
 
-goal_state = a_star_search.solve_timed(initial_board8)
+goal_state = a_star_search_h1.solve_timed(initial_board8)

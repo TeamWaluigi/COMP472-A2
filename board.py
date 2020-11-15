@@ -163,6 +163,7 @@ class Board:
 
         return moves
 
+    #  Just compares the tiles, this is intended
     def equals(self, other_board):
         for row in range(self.rows):
             for column in range(self.columns):

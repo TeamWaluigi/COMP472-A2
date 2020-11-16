@@ -1,3 +1,5 @@
+from queue import PriorityQueue
+
 from board import Board, get_goal_1, get_goal_2
 from search import Search
 
@@ -5,30 +7,49 @@ from search_algorithm import SearchAlgorithmInterface
 
 
 class UniformCostSearch(SearchAlgorithmInterface):
-    def solve(self, board):
-        current_board = board
-        # current_board.print_board()  # For debug
+    def __init__(self):
+        self.open = PriorityQueue()
+        self.closed = []
 
-        goal_1 = get_goal_1(rows=board.rows, columns=board.columns)
-        goal_2 = get_goal_2(rows=board.rows, columns=board.columns)
-        # goal_1.print_board()  # For debug
-        # goal_2.print_board()  # For debug
+    def solve(self, starting_board: Board) -> Board:
+        print("Starting board state: ")
+        print(starting_board)  # For debug
+        current_board = starting_board
+        current_board.parent = None
+        self.open.put((0, current_board))
 
-        search = Search(board)
+        goal_1 = get_goal_1(rows=starting_board.rows, columns=starting_board.columns)
+        goal_2 = get_goal_2(rows=starting_board.rows, columns=starting_board.columns)
 
-        while not current_board.equals(goal_1) and not current_board.equals(goal_2):
+        while not (current_board.equals(goal_1) or current_board.equals(goal_2)):
+            self.closed.insert(0, current_board)
+
             children = current_board.get_successors()
-            search.add_new_children(children)
-            if len(search.unvisited) > 0:
-                current_board = search.unvisited.pop(0)
-                search.visited.append(current_board)
-        print(search.unvisited.__len__())
-        print(search.visited.__len__())
-        return current_board
+            for child in children:
+                if child in self.closed:
+                    continue
+                self.open.put((child.cost, child))
+
+            current_board = self.open.get()[1]
+            while current_board in self.closed:
+                # if that board is already in the closed list, skip it!;
+                # we already visited the highest priority one earlier
+                current_board = self.open.get()[1]
+
+        solved_board = current_board
+        print("Solved board state: ")
+        print(solved_board)
+
+        print("Steps in reverse order")
+        while current_board is not None:
+            print(current_board)
+            current_board = current_board.parent
+
+        return solved_board
 
 
 # Boards to test out
-initial_board = Board([4, 2, 3, 1, 5, 6, 7, 0])
+initial_board1 = Board([4, 2, 3, 1, 5, 6, 7, 0])
 initial_board2 = Board([4, 2, 3, 1, 5, 6, 7, 0])
 initial_board3 = Board([1, 0, 3, 7, 5, 2, 6, 4])
 initial_board4 = Board([3, 2, 5, 1, 6, 4, 7, 0])
@@ -40,8 +61,7 @@ initial_board9 = Board(rows=3, columns=3, raw_board=[2, 5, 3, 4, 6, 0, 7, 8, 1])
 
 uniform_cost_search = UniformCostSearch()
 
-goal_state = uniform_cost_search.solve_timed(initial_board9)
+goal_state = uniform_cost_search.solve_timed(initial_board4)
 print("----------------------")
 print("Completed Board-----------------")
 goal_state.print_board()
-

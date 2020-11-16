@@ -38,6 +38,9 @@ class Board:
         self.columns = columns
         self.parent = parent
         self.tiles = [[0 for _ in range(columns)] for _ in range(rows)]
+        self.f = 0
+        self.g = 0
+        self.h = 0
 
         row_count = 0
         column_count = 0

@@ -8,12 +8,13 @@ from SearchAlgotrithms.search_algorithm import SearchAlgorithmInterface
 
 class AStarSearch(SearchAlgorithmInterface):
 
-    def __init__(self, heuristic_func=h0):
+    def __init__(self, heuristic_func=h0, time_out=60):
         self.open_queue: PriorityQueue = PriorityQueue()
         self.open_dict = dict()
         self.closed_list = []
         self.closed_dict = dict()
         self.heuristic_func = heuristic_func
+        self.time_out = time_out
 
     def solve(self, starting_board: Board) -> any:
         self.open_queue: PriorityQueue = PriorityQueue()
@@ -36,7 +37,7 @@ class AStarSearch(SearchAlgorithmInterface):
         goal_2 = get_goal_2(rows=starting_board.rows, columns=starting_board.columns)
 
         while not (current_board.equals(goal_1) or current_board.equals(goal_2)):
-            if (time.time() - start_time) > 60:
+            if (time.time() - start_time) > self.time_out:
                 return None
 
             current_board = self.search(current_board)

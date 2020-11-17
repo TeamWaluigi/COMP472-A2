@@ -1,5 +1,6 @@
 from Input.puzzle_generator import generate_puzzles
 from Input.puzzle_reader import get_puzzles_from_file
+from Output.solution_output import SolutionOutput
 from SearchAlgotrithms.a_star_search import AStarSearch
 from SearchAlgotrithms.greedy_best_first_search import GreedyBestSearch
 from SearchAlgotrithms.heuristics import h1, h2
@@ -44,6 +45,20 @@ for puzzle in puzzles:
         search_algorithms[search_algorithm][1].append(solution)
 
 print("woah!")
+
+print("Starting Output")
+solution_output = SolutionOutput()
+solution_output.write_solutions("ucs_solution.txt", search_algorithms["uniform_cost_search"][1])
+solution_output.write_solutions("gbfs-h1_solution.txt", search_algorithms["greedy_best_search_h1"][1])
+solution_output.write_solutions("gbfs-h2_solution.txt", search_algorithms["greedy_best_search_h2"][1])
+solution_output.write_solutions("astar-h1_solution", search_algorithms["a_star_search_h1"][1])
+solution_output.write_solutions("astar-h2_solution", search_algorithms["a_star_search_h2"][1])
+
+solution_output.write_search("ucs_search.txt", search_algorithms["uniform_cost_search"][1])
+solution_output.write_search("gbfs-h1_search.txt", search_algorithms["greedy_best_search_h1"][1])
+solution_output.write_search("gbfs-h2_search.txt", search_algorithms["greedy_best_search_h2"][1])
+solution_output.write_search("astar-h1_search.txt", search_algorithms["a_star_search_h1"][1])
+solution_output.write_search("astar-h2_search.txt", search_algorithms["a_star_search_h2"][1])
 
 # TODO
 # Print Output

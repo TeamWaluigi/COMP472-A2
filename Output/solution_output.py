@@ -11,6 +11,7 @@ class SolutionOutput:
         self.total_puzzles = 0
         self.costs = []
         self.execution_times = []
+        self.closed_size = []
         self.optimal_cost = 0.1
 
     def write_solutions(self, file_name, puzzles):
@@ -19,6 +20,7 @@ class SolutionOutput:
         self.search_length = []
         self.costs = []
         self.execution_times = []
+        self.closed_size = []
         self.total_puzzles = len(puzzles)
 
         for i in range(len(puzzles)):
@@ -39,6 +41,7 @@ class SolutionOutput:
             self.execution_times.append(puzzles[i].execution_time)
             decimal.getcontext().rounding = decimal.ROUND_DOWN
             total_time = decimal.Decimal(puzzles[i].execution_time)
+            self.closed_size.append(puzzles[i].closed_length_solved)
             for node_count in range(len(nodes)):
                 current_board = nodes[node_count].tiles_to_flat_list()
                 zero_position = 0
@@ -97,6 +100,10 @@ class SolutionOutput:
         return nodes, costs
 
     def analysis(self, unique_name):
+        total_visited = 0
+        for size in self.closed_size:
+            total_visited += size
+        average_visited = total_visited / self.total_puzzles
         sum_search = 0
         for search in self.search_length:
             sum_search += search
@@ -120,6 +127,8 @@ class SolutionOutput:
             os.remove(file_path)
         file = open(file_path, "x")
         file = open(file_path, "a")
+        file.write("Total Solution Path Size : " + str(total_visited) + "\n")
+        file.write("Average Solution Path Size : " + str(average_visited) + "\n")
         file.write("Total Puzzles : " + str(self.total_puzzles) + "\n")
         file.write("Average Length of Search : " + str(average_search) + "\n")
         file.write("Total Length of Search : " + str(sum_search) + "\n")

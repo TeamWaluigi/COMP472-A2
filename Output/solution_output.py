@@ -11,14 +11,19 @@ class SolutionOutput:
         self.total_puzzles = 0
         self.costs = []
         self.execution_times = []
+        self.optimal_cost = 0.1
 
     def write_solutions(self, file_name, puzzles):
         self.count = 0
+        self.no_solutions = 0
+        self.search_length = []
+        self.costs = []
+        self.execution_times = []
         self.total_puzzles = len(puzzles)
 
         for i in range(len(puzzles)):
             unique_name = str(self.count) + "_" + file_name
-            file_path = "../Output/SolutionFiles/" + unique_name
+            file_path = "Output/SolutionFiles/" + unique_name
             if os.path.exists(file_path):
                 os.remove(file_path)
             f = open(file_path, "x")
@@ -56,7 +61,7 @@ class SolutionOutput:
         self.count = 0
         for i in range(len(puzzles)):
             unique_name = str(self.count) + "_" + file_name
-            file_path = "../Output/SearchFiles/" + unique_name
+            file_path = "Output/SearchFiles/" + unique_name
             if os.path.exists(file_path):
                 os.remove(file_path)
             file = open(file_path, "x")
@@ -94,24 +99,28 @@ class SolutionOutput:
     def analysis(self, unique_name):
         sum_search = 0
         for search in self.search_length:
-            sum_search += sum_search
+            sum_search += search
         average_search = sum_search/self.total_puzzles
         total_no_solutions = self.no_solutions
         average_no_solutions = self.no_solutions / self.total_puzzles
         total_cost = 0.0
         for cost in self.costs:
             total_cost += cost
-        average_cost = cost / len(self.costs)
+        average_cost = total_cost / self.total_puzzles
         total_execution_time = 0.0
         for time in self.execution_times:
             total_execution_time += time
         average_execution_time = time / len(self.execution_times)
 
-        file_path = "../Output/Analysis/" + unique_name
+        if "ucs" in unique_name :
+            self.optimal_cost = total_cost
+
+        file_path = "Output/Analysis/" + unique_name
         if os.path.exists(file_path):
             os.remove(file_path)
         file = open(file_path, "x")
         file = open(file_path, "a")
+        file.write("Total Puzzles : " + str(self.total_puzzles) + "\n")
         file.write("Average Length of Search : " + str(average_search) + "\n")
         file.write("Total Length of Search : " + str(sum_search) + "\n")
         file.write("Average Number of No Solutions : " + str(average_no_solutions) + "\n")
@@ -120,5 +129,7 @@ class SolutionOutput:
         file.write("Average Cost : " + str(average_cost) + "\n")
         file.write("Total Execution Time : " + str(total_execution_time) + "\n")
         file.write("Average Execution Time : " + str(average_execution_time) + "\n")
+        file.write("Optimal Solution Cost : " + str(self.optimal_cost) + "\n")
+        file.write("Optimality : " + str(total_cost / self.optimal_cost))
 
 

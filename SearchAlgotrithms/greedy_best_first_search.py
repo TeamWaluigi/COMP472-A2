@@ -19,8 +19,6 @@ class GreedyBestSearch(SearchAlgorithmInterface):
     def solve(self, starting_board: Board) -> any:
         start_time = time.time()
 
-        print("Starting board state: ")
-        print(starting_board)  # For debug
         current_board = starting_board
         current_board.parent = None
         h = self.heuristic_func(current_board)
@@ -39,16 +37,7 @@ class GreedyBestSearch(SearchAlgorithmInterface):
 
             current_board = self.search(current_board)
 
-        solved_board = current_board
-        print("Solved board state: ")
-        print(solved_board)
-
-        print("Steps in reverse order")
-        while current_board is not None:
-            print(current_board)
-            current_board = current_board.parent
-
-        return solved_board
+        return current_board
 
     def search(self, current_board):
         self.closed_list.insert(0, current_board)
@@ -90,4 +79,4 @@ greedy_best_search_h0 = GreedyBestSearch()  # Default is h0
 greedy_best_search_h1 = GreedyBestSearch(heuristic_func=h1)
 greedy_best_search_h2 = GreedyBestSearch(heuristic_func=h2)
 
-goal_state = greedy_best_search_h1.solve_timed(trial_board)
+# goal_state = greedy_best_search_h1.solve_timed(trial_board)

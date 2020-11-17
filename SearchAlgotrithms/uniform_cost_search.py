@@ -18,8 +18,6 @@ class UniformCostSearch(SearchAlgorithmInterface):
     def solve(self, starting_board: Board) -> any:
         start_time = time.time()
 
-        print("Starting board state: ")
-        print(starting_board)  # For debug
         current_board = starting_board
         current_board.parent = None
         self.open_queue.put((current_board.g, current_board))
@@ -34,16 +32,7 @@ class UniformCostSearch(SearchAlgorithmInterface):
 
             current_board = self.search(current_board)
 
-        solved_board = current_board
-        # print("Solved board state: ")
-        # print(solved_board)
-        #
-        # print("Steps in reverse order")
-        # while current_board is not None:
-        #     print(current_board)
-        #     current_board = current_board.parent
-
-        return solved_board
+        return current_board
 
     def search(self, current_board):
         self.closed_list.insert(0, current_board)
@@ -87,19 +76,19 @@ initial_board8 = Board(initializing_input_data=[1, 0, 3, 7, 5, 2, 6, 4])
 initial_board9 = Board(rows=3, columns=3, initializing_input_data=[2, 5, 3, 4, 6, 0, 7, 8, 1])  # Breaks for now
 trial_board = Board(initializing_input_data=[2, 0, 5, 3, 4, 7, 6, 1])
 
-uniform_cost_search = UniformCostSearch()
-
-# goal_state = uniform_cost_search.solve_timed(initial_board1)
-goal_state1 = uniform_cost_search.solve_timed(initial_board2)
-goal_state2 = uniform_cost_search.solve_timed(initial_board8)
-goal_state3 = uniform_cost_search.solve_timed(initial_board9)
-
-goals = [goal_state1, goal_state2, goal_state3]
-
-solution_output = SolutionOutput()
-solution_output.write_solutions("ucs_solutions.txt", goals)
-solution_output.write_search("ucs_search.txt", goals)
-
-print("----------------------")
-print("Completed Board-----------------")
-# goal_state.print_board()
+# uniform_cost_search = UniformCostSearch()
+#
+# # goal_state = uniform_cost_search.solve_timed(initial_board1)
+# goal_state1 = uniform_cost_search.solve_timed(initial_board2)
+# goal_state2 = uniform_cost_search.solve_timed(initial_board8)
+# goal_state3 = uniform_cost_search.solve_timed(initial_board9)
+#
+# goals = [goal_state1, goal_state2, goal_state3]
+#
+# solution_output = SolutionOutput()
+# solution_output.write_solutions("ucs_solutions.txt", goals)
+# solution_output.write_search("ucs_search.txt", goals)
+#
+# print("----------------------")
+# print("Completed Board-----------------")
+# # goal_state.print_board()

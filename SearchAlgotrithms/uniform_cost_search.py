@@ -4,7 +4,7 @@ import time
 
 from board import Board, get_goal_1, get_goal_2
 
-from search_algorithm import SearchAlgorithmInterface
+from SearchAlgotrithms.search_algorithm import SearchAlgorithmInterface
 
 
 class UniformCostSearch(SearchAlgorithmInterface):

@@ -1,10 +1,10 @@
 import time
 
 from board import Board, get_goal_1, get_goal_2
-from heuristics import h0, h1, h2
+from SearchAlgotrithms.heuristics import h0, h1, h2
 from queue import PriorityQueue
 
-from search_algorithm import SearchAlgorithmInterface
+from SearchAlgotrithms.search_algorithm import SearchAlgorithmInterface
 
 
 class GreedyBestSearch(SearchAlgorithmInterface):

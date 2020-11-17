@@ -39,6 +39,7 @@ class UniformCostSearch(SearchAlgorithmInterface):
                 if child in self.open_dict:
                     if child.cost < self.open_dict[child]:
                         # If successor s in OPEN with higher g(n), replace old version with new s
+                        self.open_queue.put((child.cost, child))
                         self.open_dict[child] = child.cost
                         # NOTE_1 we can't replace in the priority queue,
                         # so instead we will end up adding it to the OPEN,

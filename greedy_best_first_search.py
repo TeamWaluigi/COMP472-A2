@@ -21,7 +21,9 @@ class GreedyBestSearch(SearchAlgorithmInterface):
         print(starting_board)  # For debug
         current_board = starting_board
         current_board.parent = None
-        self.open_queue.put((self.heuristic_func(current_board), time.time(), current_board))
+        h = self.heuristic_func(current_board)
+        current_board.h = h
+        self.open_queue.put((h, time.time(), current_board))
         self.open_set.add(current_board)
         # if h(n) are equal, arbitrary selection instead of comparing
         # cost (here, we use time as that arbitrary comparator)
@@ -41,13 +43,13 @@ class GreedyBestSearch(SearchAlgorithmInterface):
                 if child in self.closed_set:
                     continue  # Skip, since we've already explored, we don't consider cost g(n), and h(n) is the same
 
-                self.open_queue.put((self.heuristic_func(child), time.time(), child))
+                h = self.heuristic_func(child)
+                child.h = h
+                self.open_queue.put((h, time.time(), child))
                 # again, if h(n) are equal, arbitrary selection instead of comparing
                 # cost (here, we use time as that arbitrary comparator)
                 self.open_set.add(child)
 
-            if current_board not in self.open_set:
-                continue  # ?????
             self.open_set.remove(current_board)
             current_board = self.open_queue.get()[2]
 

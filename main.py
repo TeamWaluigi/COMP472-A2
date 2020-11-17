@@ -9,7 +9,7 @@ from board import Board
 puzzle_file_path = "Input\Puzzles\Puzzles.txt"
 
 # Generate puzzles (If needed)
-generate_puzzles(2, 4, 1)  # Comment out as needed  # TODO increase to 50
+generate_puzzles(2, 4, 5)  # Comment out as needed  # TODO increase to 50
 
 # Read puzzles from Input file
 puzzles = get_puzzles_from_file(puzzle_file_path=puzzle_file_path)
@@ -37,6 +37,7 @@ search_algorithms["a_star_search_h2"] = [a_star_search_h2, []]
 
 # Solve each puzzle
 for puzzle in puzzles:
+    print(puzzle)
     for search_algorithm in search_algorithms:
         puzzle_board = Board(initializing_input_data=puzzle)
         solution = search_algorithms[search_algorithm][0].solve(puzzle_board)

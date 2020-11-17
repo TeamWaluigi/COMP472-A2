@@ -16,6 +16,10 @@ class AStarSearch(SearchAlgorithmInterface):
         self.heuristic_func = heuristic_func
 
     def solve(self, starting_board: Board) -> any:
+        self.open_queue: PriorityQueue = PriorityQueue()
+        self.open_dict = dict()
+        self.closed_list = []
+        self.closed_dict = dict()
         start_time = time.time()
 
         current_board = starting_board
@@ -36,12 +40,15 @@ class AStarSearch(SearchAlgorithmInterface):
                 return None
 
             current_board = self.search(current_board)
+            if current_board is None:
+                return None
 
         return current_board
 
     def search(self, current_board):
         self.closed_list.insert(0, current_board)
         self.closed_dict[current_board] = (current_board.g, current_board.h)
+
         children = current_board.get_successors()
         for child in children:
             if child in self.open_dict:
@@ -87,28 +94,20 @@ class AStarSearch(SearchAlgorithmInterface):
             child.f = f
             self.open_queue.put((f, child))
             self.open_dict[child] = (g, h)
-        self.open_dict.pop(current_board, None)
-        current_board = self.open_queue.get()[1]
-        while current_board in self.closed_dict:  # See NOTE_1 above for replacing OPEN nodes
+
+        if len(self.open_dict) != 0:
             self.open_dict.pop(current_board, None)
             current_board = self.open_queue.get()[1]
+        else:
+            print("ASS True No Solution!")
+            return None
+
+        while current_board in self.closed_dict:  # See NOTE_1 above for replacing OPEN nodes
+            if len(self.open_dict) != 0:
+                self.open_dict.pop(current_board, None)
+                current_board = self.open_queue.get()[1]
+            else:
+                print("ASS True No Solution!")
+                return None
+
         return current_board
-
-
-# Boards to test out
-initial_board1 = Board(initializing_input_data=[0, 2, 3, 4, 5, 6, 7, 1])
-initial_board2 = Board(initializing_input_data=[4, 2, 3, 1, 5, 6, 7, 0])
-initial_board3 = Board(initializing_input_data=[1, 0, 3, 7, 5, 2, 6, 4])
-initial_board4 = Board(initializing_input_data=[3, 2, 5, 1, 6, 4, 7, 0])
-initial_board5 = Board(initializing_input_data=[1, 2, 0, 3, 5, 6, 7, 4])
-initial_board6 = Board(initializing_input_data=[1, 3, 5, 7, 2, 4, 6, 0])
-initial_board7 = Board(initializing_input_data=[0, 3, 7, 5, 2, 6, 1, 4])
-initial_board8 = Board(initializing_input_data=[1, 0, 3, 7, 5, 2, 6, 4])
-initial_board9 = Board(rows=3, columns=3, initializing_input_data=[2, 5, 3, 4, 6, 0, 7, 8, 1])  # Breaks for now
-trial_board = Board(initializing_input_data=[2, 0, 5, 3, 4, 7, 6, 1])
-
-a_star_search_h0 = AStarSearch()  # Default is h0
-a_star_search_h1 = AStarSearch(heuristic_func=h1)
-a_star_search_h2 = AStarSearch(heuristic_func=h2)
-
-goal_state = a_star_search_h1.solve_timed(trial_board)

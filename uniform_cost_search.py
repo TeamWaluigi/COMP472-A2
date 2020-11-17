@@ -1,40 +1,64 @@
 from queue import PriorityQueue
 
+import time
+
 from board import Board, get_goal_1, get_goal_2
-from search import Search
 
 from search_algorithm import SearchAlgorithmInterface
 
 
 class UniformCostSearch(SearchAlgorithmInterface):
     def __init__(self):
-        self.open = PriorityQueue()
-        self.closed = []
+        self.open_queue: PriorityQueue = PriorityQueue()
+        self.open_dict = dict()
+        self.closed_list = []
+        self.closed_set = set()
 
-    def solve(self, starting_board: Board) -> Board:
+    def solve(self, starting_board: Board) -> any:
+        start_time = time.time()
+
         print("Starting board state: ")
         print(starting_board)  # For debug
         current_board = starting_board
         current_board.parent = None
-        self.open.put((0, current_board))
+        self.open_queue.put((current_board.cost, current_board))
+        self.open_dict[current_board] = current_board.cost
 
         goal_1 = get_goal_1(rows=starting_board.rows, columns=starting_board.columns)
         goal_2 = get_goal_2(rows=starting_board.rows, columns=starting_board.columns)
 
         while not (current_board.equals(goal_1) or current_board.equals(goal_2)):
-            self.closed.insert(0, current_board)
+            if (time.time() - start_time) > 60:
+                return "NO SOLUTION"
+
+            self.closed_list.insert(0, current_board)
+            self.closed_set.add(current_board)
 
             children = current_board.get_successors()
             for child in children:
-                if child in self.closed:
+                if child in self.open_dict:
+                    if child.cost < self.open_dict[child]:
+                        # If successor s in OPEN with higher g(n), replace old version with new s
+                        self.open_dict[child] = child.cost
+                        # NOTE_1 we can't replace in the priority queue,
+                        # so instead we will end up adding it to the OPEN,
+                        # priority will be sorted, and we will later add
+                        # check to "delete" the remaining duplicate(s)
                     continue
-                self.open.put((child.cost, child))
 
-            current_board = self.open.get()[1]
-            while current_board in self.closed:
-                # if that board is already in the closed list, skip it!;
-                # we already visited the highest priority one earlier
-                current_board = self.open.get()[1]
+                if child in self.closed_set:
+                    # If successor s already in CLOSED, ignore s
+                    continue
+
+                self.open_queue.put((child.cost, child))
+                self.open_dict[child] = child.cost
+
+            self.open_dict.pop(current_board, None)
+            current_board = self.open_queue.get()[1]
+
+            while current_board in self.closed_set:  # See NOTE_1 above for replacing OPEN nodes
+                self.open_dict.pop(current_board, None)
+                current_board = self.open_queue.get()[1]
 
         solved_board = current_board
         print("Solved board state: ")
@@ -49,19 +73,20 @@ class UniformCostSearch(SearchAlgorithmInterface):
 
 
 # Boards to test out
-initial_board1 = Board([4, 2, 3, 1, 5, 6, 7, 0])
-initial_board2 = Board([4, 2, 3, 1, 5, 6, 7, 0])
-initial_board3 = Board([1, 0, 3, 7, 5, 2, 6, 4])
-initial_board4 = Board([3, 2, 5, 1, 6, 4, 7, 0])
-initial_board5 = Board([1, 2, 0, 3, 5, 6, 7, 4])
-initial_board6 = Board([1, 3, 5, 7, 2, 4, 6, 0])
-initial_board7 = Board([0, 3, 7, 5, 2, 6, 1, 4])
-initial_board8 = Board([1, 0, 3, 7, 5, 2, 6, 4])
-initial_board9 = Board(rows=3, columns=3, raw_board=[2, 5, 3, 4, 6, 0, 7, 8, 1])  # Breaks for now
+initial_board1 = Board(initializing_input_data=[0, 2, 3, 4, 5, 6, 7, 1])
+initial_board2 = Board(initializing_input_data=[4, 2, 3, 1, 5, 6, 7, 0])
+initial_board3 = Board(initializing_input_data=[1, 0, 3, 7, 5, 2, 6, 4])
+initial_board4 = Board(initializing_input_data=[3, 2, 5, 1, 6, 4, 7, 0])
+initial_board5 = Board(initializing_input_data=[1, 2, 0, 3, 5, 6, 7, 4])
+initial_board6 = Board(initializing_input_data=[1, 3, 5, 7, 2, 4, 6, 0])
+initial_board7 = Board(initializing_input_data=[0, 3, 7, 5, 2, 6, 1, 4])
+initial_board8 = Board(initializing_input_data=[1, 0, 3, 7, 5, 2, 6, 4])
+initial_board9 = Board(rows=3, columns=3, initializing_input_data=[2, 5, 3, 4, 6, 0, 7, 8, 1])  # Breaks for now
+trial_board = Board(initializing_input_data=[2, 0, 5, 3, 4, 7, 6, 1])
 
 uniform_cost_search = UniformCostSearch()
 
-goal_state = uniform_cost_search.solve_timed(initial_board4)
+goal_state = uniform_cost_search.solve_timed(trial_board)
 print("----------------------")
 print("Completed Board-----------------")
 goal_state.print_board()

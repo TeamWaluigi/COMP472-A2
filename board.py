@@ -1,9 +1,12 @@
+import copy
+from typing import List
+
 from move import Move
 
 
 # noinspection DuplicatedCode
 def get_goal_1(rows, columns):
-    goal_1 = Board(raw_board=range(rows, columns), rows=rows, columns=columns)
+    goal_1 = Board(initializing_input_data=range(rows, columns), rows=rows, columns=columns)
     tile = 1
 
     for row in range(rows):
@@ -17,7 +20,7 @@ def get_goal_1(rows, columns):
 
 # noinspection DuplicatedCode
 def get_goal_2(rows, columns):
-    goal_2 = Board(raw_board=range(rows, columns), rows=rows, columns=columns)
+    goal_2 = Board(initializing_input_data=range(rows, columns), rows=rows, columns=columns)
     tile = 1
 
     for column in range(columns):
@@ -31,7 +34,8 @@ def get_goal_2(rows, columns):
 
 class Board:
 
-    def __init__(self, raw_board, rows=2, columns=4, cost=0, parent=None):
+    def __init__(self, tiles_template=None, initializing_input_data=range(2, 4),
+                 rows=2, columns=4, cost=0, parent=None):
         self.cost = cost
         self.length = rows * columns - 1
         self.rows = rows
@@ -42,27 +46,30 @@ class Board:
         self.g = 0
         self.h = 0
 
+        if tiles_template is not None:
+            self.tiles = tiles_template
+        else:
+            self.initialize_tiles_using_input_data(columns, initializing_input_data)
+
+    def initialize_tiles_using_input_data(self, columns, initializing_input_data):
         row_count = 0
         column_count = 0
-        for tile in raw_board:
+        for tile in initializing_input_data:
             self.tiles[row_count][column_count] = tile
             column_count += 1
             if column_count % columns == 0:
                 column_count = 0
                 row_count += 1
 
-    def raw_board(self):
-        board = []
-        for row in self.tiles:
-            for tile in row:
-                board.append(tile)
-        return board
-
     def is_corner_piece(self, row, column):
         if row == 0 or row == self.rows - 1:
             if column == 0 or column == self.columns - 1:
                 return True
         return False
+
+    def __hash__(self):
+        hashable_tiles = tuple([tile for row in self.tiles for tile in row])
+        return hash(hashable_tiles)
 
     def __lt__(self, other):
         return self.cost < other.cost
@@ -166,21 +173,17 @@ class Board:
 
         return moves
 
-    #  Just compares the tiles, this is intended
     def equals(self, other_board):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                if self.tiles[row][column] != other_board.tiles[row][column]:
-                    return False
-        return True
+        return hash(self) == hash(other_board)
 
     def get_successors(self):
         successors = []
         moves = self.get_moves()
-        raw_board = self.raw_board()
 
         for move in moves:
-            successor = Board(rows=self.rows, columns=self.columns, raw_board=raw_board, cost=move.cost, parent=self)
+            tiles_template = copy.deepcopy(self.tiles)
+            successor = Board(rows=self.rows, columns=self.columns, tiles_template=tiles_template,
+                              cost=move.cost, parent=self)
 
             zero_row = move.get_zero_row()
             zero_column = move.get_zero_column()

@@ -13,10 +13,10 @@ class SearchAlgorithmInterface:
     def h(self, board: Board) -> int:
         pass
 
-    def solve(self, board: Board) -> Board:
+    def solve(self, board: Board) -> any:
         pass
 
-    def solve_timed(self, board: Board) -> Board:
+    def solve_timed(self, board: Board) -> any:
         start = time.time()
         solved_board = self.solve(board)
         end = time.time()

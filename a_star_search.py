@@ -61,8 +61,8 @@ initial_board5 = Board([1, 2, 0, 3, 5, 6, 7, 4])
 initial_board6 = Board([1, 3, 5, 7, 2, 4, 6, 0])
 initial_board7 = Board([0, 3, 7, 5, 2, 6, 1, 4])
 initial_board8 = Board([3, 0, 1, 4, 2, 6, 5, 7])
-initial_board9 = Board(rows=3, columns=3, raw_board=[2, 5, 3, 4, 6, 0, 7, 8, 1])
-initial_board10 = Board(rows=3, columns=3, raw_board=[2, 0, 7, 4, 6, 5, 8, 3, 1])
+initial_board9 = Board(rows=3, columns=3, initializing_input_data=[2, 5, 3, 4, 6, 0, 7, 8, 1])
+initial_board10 = Board(rows=3, columns=3, initializing_input_data=[2, 0, 7, 4, 6, 5, 8, 3, 1])
 
 a_star_search_h0 = AStarSearch()  # Default is h0
 a_star_search_h1 = AStarSearch(heuristic_func=h1)

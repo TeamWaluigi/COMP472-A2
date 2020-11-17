@@ -16,7 +16,9 @@ class GreedyBestSearch(SearchAlgorithmInterface):
         self.closed_set = set()
         self.heuristic_func = heuristic_func
 
-    def solve(self, starting_board: Board) -> Board:
+    def solve(self, starting_board: Board) -> any:
+        start_time = time.time()
+
         print("Starting board state: ")
         print(starting_board)  # For debug
         current_board = starting_board
@@ -32,29 +34,10 @@ class GreedyBestSearch(SearchAlgorithmInterface):
         goal_2 = get_goal_2(rows=starting_board.rows, columns=starting_board.columns)
 
         while not (current_board.equals(goal_1) or current_board.equals(goal_2)):
-            self.closed_list.insert(0, current_board)
-            self.closed_set.add(current_board)
+            if (time.time() - start_time) > 60:
+                return None
 
-            children = current_board.get_successors()
-            for child in children:
-                if child in self.open_set:
-                    continue  # We don't care to replace here, since we don't consider cost g(n), and h(n) is the same
-
-                if child in self.closed_set:
-                    continue  # Skip, since we've already explored, we don't consider cost g(n), and h(n) is the same
-
-                h = self.heuristic_func(child)
-                child.h = h
-                self.open_queue.put((h, time.time(), child))
-                # again, if h(n) are equal, arbitrary selection instead of comparing
-                # cost (here, we use time as that arbitrary comparator)
-                self.open_set.add(child)
-
-            self.open_set.remove(current_board)
-            current_board = self.open_queue.get()[2]
-
-            while current_board in self.closed_set:  # Because of the initial board not being removed in open_queue....
-                current_board = self.open_queue.get()[2]
+            current_board = self.search(current_board)
 
         solved_board = current_board
         print("Solved board state: ")
@@ -66,6 +49,29 @@ class GreedyBestSearch(SearchAlgorithmInterface):
             current_board = current_board.parent
 
         return solved_board
+
+    def search(self, current_board):
+        self.closed_list.insert(0, current_board)
+        self.closed_set.add(current_board)
+        children = current_board.get_successors()
+        for child in children:
+            if child in self.open_set:
+                continue  # We don't care to replace here, since we don't consider cost g(n), and h(n) is the same
+
+            if child in self.closed_set:
+                continue  # Skip, since we've already explored, we don't consider cost g(n), and h(n) is the same
+
+            h = self.heuristic_func(child)
+            child.h = h
+            self.open_queue.put((h, time.time(), child))
+            # again, if h(n) are equal, arbitrary selection instead of comparing
+            # cost (here, we use time as that arbitrary comparator)
+            self.open_set.add(child)
+        self.open_set.remove(current_board)
+        current_board = self.open_queue.get()[2]
+        while current_board in self.closed_set:  # Because of the initial board not being removed in open_queue....
+            current_board = self.open_queue.get()[2]
+        return current_board
 
 
 # Boards to test out

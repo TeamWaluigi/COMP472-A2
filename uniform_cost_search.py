@@ -29,37 +29,9 @@ class UniformCostSearch(SearchAlgorithmInterface):
 
         while not (current_board.equals(goal_1) or current_board.equals(goal_2)):
             if (time.time() - start_time) > 60:
-                return "NO SOLUTION"
+                return None
 
-            self.closed_list.insert(0, current_board)
-            self.closed_set.add(current_board)
-
-            children = current_board.get_successors()
-            for child in children:
-                if child in self.open_dict:
-                    if child.g < self.open_dict[child]:
-                        # If successor s in OPEN with higher g(n), replace old version with new s
-                        self.open_queue.put((child.g, child))
-                        self.open_dict[child] = child.g
-                        # NOTE_1 we can't replace in the priority queue,
-                        # so instead we will end up adding it to the OPEN,
-                        # priority will be sorted, and we will later add
-                        # check to "delete" the remaining duplicate(s)
-                    continue
-
-                if child in self.closed_set:
-                    # If successor s already in CLOSED, ignore s
-                    continue
-
-                self.open_queue.put((child.g, child))
-                self.open_dict[child] = child.g
-
-            self.open_dict.pop(current_board, None)
-            current_board = self.open_queue.get()[1]
-
-            while current_board in self.closed_set:  # See NOTE_1 above for replacing OPEN nodes
-                self.open_dict.pop(current_board, None)
-                current_board = self.open_queue.get()[1]
+            current_board = self.search(current_board)
 
         solved_board = current_board
         print("Solved board state: ")
@@ -71,6 +43,35 @@ class UniformCostSearch(SearchAlgorithmInterface):
             current_board = current_board.parent
 
         return solved_board
+
+    def search(self, current_board):
+        self.closed_list.insert(0, current_board)
+        self.closed_set.add(current_board)
+        children = current_board.get_successors()
+        for child in children:
+            if child in self.open_dict:
+                if child.g < self.open_dict[child]:
+                    # If successor s in OPEN with higher g(n), replace old version with new s
+                    self.open_queue.put((child.g, child))
+                    self.open_dict[child] = child.g
+                    # NOTE_1 we can't replace in the priority queue,
+                    # so instead we will end up adding it to the OPEN,
+                    # priority will be sorted, and we will later add
+                    # check to "delete" the remaining duplicate(s)
+                continue
+
+            if child in self.closed_set:
+                # If successor s already in CLOSED, ignore s
+                continue
+
+            self.open_queue.put((child.g, child))
+            self.open_dict[child] = child.g
+        self.open_dict.pop(current_board, None)
+        current_board = self.open_queue.get()[1]
+        while current_board in self.closed_set:  # See NOTE_1 above for replacing OPEN nodes
+            self.open_dict.pop(current_board, None)
+            current_board = self.open_queue.get()[1]
+        return current_board
 
 
 # Boards to test out

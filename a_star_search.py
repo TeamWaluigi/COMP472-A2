@@ -20,7 +20,7 @@ class AStarSearch(SearchAlgorithmInterface):
         current_board = starting_board
         current_board.parent = None
         h = self.heuristic_func(current_board)
-        g = current_board.cost
+        g = current_board.g
         f = g + h
         current_board.h = h
         current_board.f = f
@@ -37,10 +37,10 @@ class AStarSearch(SearchAlgorithmInterface):
             children = current_board.get_successors()
             for child in children:
                 if child in self.open_dict:
-                    if child.cost < self.open_dict[child][0]:
+                    if child.g < self.open_dict[child][0]:
                         # If successor s in OPEN with higher f(n), replace old version with new s
                         # We only need to compare g(n) here, since h(n) remains the same!
-                        new_g = child.cost
+                        new_g = child.g
                         h = self.open_dict[child][1]
                         new_f = new_g + h
                         child.h = h
@@ -54,10 +54,10 @@ class AStarSearch(SearchAlgorithmInterface):
                     continue
 
                 if child in self.closed_dict:
-                    if child.cost < self.closed_dict[child][0]:
+                    if child.g < self.closed_dict[child][0]:
                         # If successor s already in CLOSED with higher f(n), replace old version with new s
                         # We only need to compare g(n) here, since h(n) remains the same!
-                        new_g = child.cost
+                        new_g = child.g
                         h = self.closed_dict[child][1]
                         new_f = new_g + h
                         child.h = h
@@ -72,7 +72,7 @@ class AStarSearch(SearchAlgorithmInterface):
                         # check to "delete" the remaining duplicate(s)
                     continue
 
-                g = child.cost
+                g = child.g
                 h = self.heuristic_func(child)
                 f = g + h
                 child.h = h

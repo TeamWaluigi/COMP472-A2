@@ -21,8 +21,8 @@ class UniformCostSearch(SearchAlgorithmInterface):
         print(starting_board)  # For debug
         current_board = starting_board
         current_board.parent = None
-        self.open_queue.put((current_board.cost, current_board))
-        self.open_dict[current_board] = current_board.cost
+        self.open_queue.put((current_board.g, current_board))
+        self.open_dict[current_board] = current_board.g
 
         goal_1 = get_goal_1(rows=starting_board.rows, columns=starting_board.columns)
         goal_2 = get_goal_2(rows=starting_board.rows, columns=starting_board.columns)
@@ -37,10 +37,10 @@ class UniformCostSearch(SearchAlgorithmInterface):
             children = current_board.get_successors()
             for child in children:
                 if child in self.open_dict:
-                    if child.cost < self.open_dict[child]:
+                    if child.g < self.open_dict[child]:
                         # If successor s in OPEN with higher g(n), replace old version with new s
-                        self.open_queue.put((child.cost, child))
-                        self.open_dict[child] = child.cost
+                        self.open_queue.put((child.g, child))
+                        self.open_dict[child] = child.g
                         # NOTE_1 we can't replace in the priority queue,
                         # so instead we will end up adding it to the OPEN,
                         # priority will be sorted, and we will later add
@@ -51,8 +51,8 @@ class UniformCostSearch(SearchAlgorithmInterface):
                     # If successor s already in CLOSED, ignore s
                     continue
 
-                self.open_queue.put((child.cost, child))
-                self.open_dict[child] = child.cost
+                self.open_queue.put((child.g, child))
+                self.open_dict[child] = child.g
 
             self.open_dict.pop(current_board, None)
             current_board = self.open_queue.get()[1]

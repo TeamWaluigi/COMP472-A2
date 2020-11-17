@@ -35,16 +35,15 @@ def get_goal_2(rows, columns):
 class Board:
 
     def __init__(self, tiles_template=None, initializing_input_data=range(2, 4),
-                 rows=2, columns=4, cost=0, parent=None):
-        self.cost = cost
+                 rows=2, columns=4, g=0, parent=None):
+        self.g = g
+        self.h = 0
+        self.f = 0
         self.length = rows * columns - 1
         self.rows = rows
         self.columns = columns
         self.parent = parent
         self.tiles = [[0 for _ in range(columns)] for _ in range(rows)]
-        self.f = 0
-        self.g = 0
-        self.h = 0
 
         if tiles_template is not None:
             self.tiles = tiles_template
@@ -72,7 +71,7 @@ class Board:
         return hash(hashable_tiles)
 
     def __lt__(self, other):
-        return self.cost < other.cost
+        return self.g < other.g
 
     def __eq__(self, other):
         return self.equals(other)
@@ -109,16 +108,16 @@ class Board:
 
         # Right
         if column + 1 < self.columns:
-            moves.append(Move(row, column + 1, row, column, 1 + self.cost))
+            moves.append(Move(row, column + 1, row, column, 1 + self.g))
         # Left
         if column > 0:
-            moves.append(Move(row, column - 1, row, column, 1 + self.cost))
+            moves.append(Move(row, column - 1, row, column, 1 + self.g))
         # Up
         if row > 0:
-            moves.append(Move(row - 1, column, row, column, 1 + self.cost))
+            moves.append(Move(row - 1, column, row, column, 1 + self.g))
         # Down
         if row + 1 < self.rows:
-            moves.append(Move(row + 1, column, row, column, 1 + self.cost))
+            moves.append(Move(row + 1, column, row, column, 1 + self.g))
 
         if self.is_corner_piece(row, column):
 
@@ -126,50 +125,50 @@ class Board:
             if self.columns > 2:
                 # Wrap Left
                 if column == 0:
-                    moves.append(Move(row, self.columns - 1, row, column, 2 + self.cost))
+                    moves.append(Move(row, self.columns - 1, row, column, 2 + self.g))
 
                 # Wrap Right
                 if column == self.columns - 1:
-                    moves.append(Move(row, 0, row, column, 2 + self.cost))
+                    moves.append(Move(row, 0, row, column, 2 + self.g))
 
             if self.rows > 2:
                 # Wrap Up
                 if row == 0:
-                    moves.append(Move(self.rows - 1, column, row, column, 2 + self.cost))
+                    moves.append(Move(self.rows - 1, column, row, column, 2 + self.g))
 
                 # Wrap Down
                 if row == self.columns - 1:
-                    moves.append(Move(0, column, row, column, 2 + self.cost))
+                    moves.append(Move(0, column, row, column, 2 + self.g))
 
             # Immediate Diagonal Moves
             # Up and to the right
             if row > 0 and column + 1 < self.columns:
-                moves.append(Move(row - 1, column + 1, row, column, 3 + self.cost))
+                moves.append(Move(row - 1, column + 1, row, column, 3 + self.g))
             # Up and to the left
             if row > 0 and column > 0:
-                moves.append(Move(row - 1, column - 1, row, column, 3 + self.cost))
+                moves.append(Move(row - 1, column - 1, row, column, 3 + self.g))
             # Down and to the right
             if row + 1 < self.rows and column + 1 < self.columns:
-                moves.append(Move(row + 1, column + 1, row, column, 3 + self.cost))
+                moves.append(Move(row + 1, column + 1, row, column, 3 + self.g))
             # Down and to the left
             if row + 1 < self.rows and column > 0:
-                moves.append(Move(row + 1, column - 1, row, column, 3 + self.cost))
+                moves.append(Move(row + 1, column - 1, row, column, 3 + self.g))
 
             # Opposite Corner Move
             if row == 0:
                 # From Top Left
                 if column == 0:
-                    moves.append(Move(self.rows - 1, self.columns - 1, row, column, 3 + self.cost))
+                    moves.append(Move(self.rows - 1, self.columns - 1, row, column, 3 + self.g))
                 # From Top Right
                 else:
-                    moves.append(Move(self.rows - 1, 0, row, column, 3 + self.cost))
+                    moves.append(Move(self.rows - 1, 0, row, column, 3 + self.g))
             else:
                 # From Bottom Left
                 if column == 0:
-                    moves.append(Move(0, self.columns - 1, row, column, 3 + self.cost))
+                    moves.append(Move(0, self.columns - 1, row, column, 3 + self.g))
                 # From Bottom Right
                 else:
-                    moves.append(Move(0, 0, row, column, 3 + self.cost))
+                    moves.append(Move(0, 0, row, column, 3 + self.g))
 
         return moves
 
@@ -183,7 +182,7 @@ class Board:
         for move in moves:
             tiles_template = copy.deepcopy(self.tiles)
             successor = Board(rows=self.rows, columns=self.columns, tiles_template=tiles_template,
-                              cost=move.cost, parent=self)
+                              g=move.cost, parent=self)
 
             zero_row = move.get_zero_row()
             zero_column = move.get_zero_column()

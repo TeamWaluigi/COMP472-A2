@@ -1,6 +1,6 @@
 from typing import List
 
-default_puzzle_file_path = "C:\Git Repositories\COMP472-A2\Input\Puzzles\Puzzles.txt"
+default_puzzle_file_path = "Input\Puzzles\Puzzles.txt"
 
 
 def get_puzzles_from_file(puzzle_file_path=default_puzzle_file_path) -> any:

@@ -1,0 +1,8 @@
+Average Length of Search : 0.0
+Total Length of Search : 0
+Average Number of No Solutions : 0.0
+Total Number of No Solutions : 0
+Total Cost : 24.0
+Average Cost : 2.0
+Total Execution Time : 1.275336742401123
+Average Execution Time : 0.010000228881835938

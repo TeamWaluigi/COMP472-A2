@@ -8,9 +8,14 @@ class SolutionOutput:
         self.count = count
         self.no_solutions = 0
         self.search_length = []
+        self.total_puzzles = 0
+        self.costs = []
+        self.execution_times = []
 
     def write_solutions(self, file_name, puzzles):
         self.count = 0
+        self.total_puzzles = len(puzzles)
+
         for i in range(len(puzzles)):
             unique_name = str(self.count) + "_" + file_name
             file_path = "../Output/SolutionFiles/" + unique_name
@@ -25,8 +30,8 @@ class SolutionOutput:
                 continue
 
             nodes, costs = self.find_path(puzzles[i])
-            self.search_length = len(nodes)
-
+            self.search_length.append(len(nodes))
+            self.execution_times.append(puzzles[i].execution_time)
             decimal.getcontext().rounding = decimal.ROUND_DOWN
             total_time = decimal.Decimal(puzzles[i].execution_time)
             for node_count in range(len(nodes)):
@@ -36,14 +41,16 @@ class SolutionOutput:
                 for j in range(len(current_board)):
                     if current_board[j] == 0:
                         zero_position = j
-                row = str(zero_position) + " " + str(costs[node_count]) + " "
+                row = str(nodes[node_count].last_tile_moved) + " " + str(costs[node_count]) + " "
                 for j in range(len(current_board)):
                     row = row + str(current_board[j]) + " "
                 row = row + "\n"
                 f.write(row)
             f.write(str(puzzles[i].g) + " " + str(round(total_time, 2)))
+            self.costs.append(puzzles[i].g)
             f.close()
             self.count += 1
+        self.analysis(file_name)
 
     def write_search(self, file_name, puzzles):
         self.count = 0
@@ -84,8 +91,34 @@ class SolutionOutput:
         nodes.reverse()
         return nodes, costs
 
-    def analysis(self):
-        average_search = 0
+    def analysis(self, unique_name):
         sum_search = 0
-        for i in range(len(self.search_length)):
-            sum_search += self.search_length[i]
+        for search in self.search_length:
+            sum_search += sum_search
+        average_search = sum_search/self.total_puzzles
+        total_no_solutions = self.no_solutions
+        average_no_solutions = self.no_solutions / self.total_puzzles
+        total_cost = 0.0
+        for cost in self.costs:
+            total_cost += cost
+        average_cost = cost / len(self.costs)
+        total_execution_time = 0.0
+        for time in self.execution_times:
+            total_execution_time += time
+        average_execution_time = time / len(self.execution_times)
+
+        file_path = "../Output/Analysis/" + unique_name
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        file = open(file_path, "x")
+        file = open(file_path, "a")
+        file.write("Average Length of Search : " + str(average_search) + "\n")
+        file.write("Total Length of Search : " + str(sum_search) + "\n")
+        file.write("Average Number of No Solutions : " + str(average_no_solutions) + "\n")
+        file.write("Total Number of No Solutions : " + str(total_no_solutions) + "\n")
+        file.write("Total Cost : " + str(total_cost) + "\n")
+        file.write("Average Cost : " + str(average_cost) + "\n")
+        file.write("Total Execution Time : " + str(total_execution_time) + "\n")
+        file.write("Average Execution Time : " + str(average_execution_time) + "\n")
+
+

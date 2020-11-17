@@ -2,7 +2,7 @@ import copy
 import os
 import random
 
-file_path = "C:\Git Repositories\COMP472-A2\Input\Puzzles\Puzzles.txt"  # TODO shorten path
+file_path = "Input\Puzzles\Puzzles.txt"  # TODO shorten path
 
 
 def generate_puzzles(row, column, count):

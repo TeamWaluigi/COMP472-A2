@@ -45,6 +45,7 @@ class Board:
         self.columns = columns
         self.parent = parent
         self.tiles = [[0 for _ in range(columns)] for _ in range(rows)]
+        self.last_tile_moved = 0
 
         if tiles_template is not None:
             self.tiles = tiles_template
@@ -196,6 +197,7 @@ class Board:
             zero_column = move.get_zero_column()
             move_row = move.get_row()
             move_column = move.get_column()
+            successor.last_tile_moved = successor.tiles[move_row][move_column]
             successor.tiles[zero_row][zero_column], successor.tiles[move_row][move_column] = \
                 successor.tiles[move_row][move_column], 0
 

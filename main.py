@@ -6,7 +6,7 @@ from SearchAlgotrithms.heuristics import h1, h2
 from SearchAlgotrithms.uniform_cost_search import UniformCostSearch
 from board import Board
 
-puzzle_file_path = "C:\Git Repositories\COMP472-A2\Input\Puzzles\Puzzles.txt"
+puzzle_file_path = "Input\Puzzles\Puzzles.txt"
 
 # Generate puzzles (If needed)
 generate_puzzles(2, 4, 1)  # Comment out as needed  # TODO increase to 50

@@ -46,6 +46,8 @@ class Board:
         self.parent = parent
         self.tiles = [[0 for _ in range(columns)] for _ in range(rows)]
         self.last_tile_moved = 0
+        self.closed_length_solved = 0
+        self.open_length_solved = 0
 
         if tiles_template is not None:
             self.tiles = tiles_template

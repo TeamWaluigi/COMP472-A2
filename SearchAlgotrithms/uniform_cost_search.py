@@ -38,6 +38,8 @@ class UniformCostSearch(SearchAlgorithmInterface):
             if current_board is None:
                 return None
 
+        current_board.open_length_solved = len(self.open_dict)
+        current_board.closed_length_solved = len(self.closed_list)
         return current_board
 
     def search(self, current_board):

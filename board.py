@@ -39,6 +39,7 @@ class Board:
         self.g = g
         self.h = 0
         self.f = 0
+        self.execution_time = 0
         self.length = rows * columns - 1
         self.rows = rows
         self.columns = columns
@@ -49,6 +50,13 @@ class Board:
             self.tiles = tiles_template
         else:
             self.initialize_tiles_using_input_data(columns, initializing_input_data)
+
+    def tiles_to_flat_list(self):
+        board = []
+        for row in self.tiles:
+            for tile in row:
+                board.append(tile)
+        return board
 
     def initialize_tiles_using_input_data(self, columns, initializing_input_data):
         row_count = 0

@@ -2,6 +2,7 @@ from queue import PriorityQueue
 
 import time
 
+from Output.solution_output import SolutionOutput
 from board import Board, get_goal_1, get_goal_2
 
 from SearchAlgotrithms.search_algorithm import SearchAlgorithmInterface
@@ -34,13 +35,13 @@ class UniformCostSearch(SearchAlgorithmInterface):
             current_board = self.search(current_board)
 
         solved_board = current_board
-        print("Solved board state: ")
-        print(solved_board)
-
-        print("Steps in reverse order")
-        while current_board is not None:
-            print(current_board)
-            current_board = current_board.parent
+        # print("Solved board state: ")
+        # print(solved_board)
+        #
+        # print("Steps in reverse order")
+        # while current_board is not None:
+        #     print(current_board)
+        #     current_board = current_board.parent
 
         return solved_board
 
@@ -88,7 +89,17 @@ trial_board = Board(initializing_input_data=[2, 0, 5, 3, 4, 7, 6, 1])
 
 uniform_cost_search = UniformCostSearch()
 
-goal_state = uniform_cost_search.solve_timed(trial_board)
+# goal_state = uniform_cost_search.solve_timed(initial_board1)
+goal_state1 = uniform_cost_search.solve_timed(initial_board2)
+goal_state2 = uniform_cost_search.solve_timed(initial_board8)
+goal_state3 = uniform_cost_search.solve_timed(initial_board9)
+
+goals = [goal_state1, goal_state2, goal_state3]
+
+solution_output = SolutionOutput()
+solution_output.write_solutions("ucs_solutions.txt", goals)
+solution_output.write_search("ucs_search.txt", goals)
+
 print("----------------------")
 print("Completed Board-----------------")
-goal_state.print_board()
+# goal_state.print_board()

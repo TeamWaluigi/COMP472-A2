@@ -21,6 +21,8 @@ class SearchAlgorithmInterface:
         solved_board = self.solve(board)
         end = time.time()
         print("--Search time:-------------")
-        print(end - start)
+        execution_time = end - start
+        print(execution_time)
+        solved_board.execution_time = execution_time
         return solved_board
 

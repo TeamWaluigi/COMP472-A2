@@ -12,7 +12,7 @@ from board import Board
 puzzle_file_path = "Input\Puzzles\Puzzles.txt"
 puzzle_rows = 2
 puzzle_columns = 4
-total_puzzles = 5  # TODO set to 50
+total_puzzles = 50  # TODO set to 50
 time_out_value = 60.0
 # time_out_value = sys.float_info.max
 
@@ -59,8 +59,8 @@ solution_output = SolutionOutput()
 solution_output.write_solutions("ucs_solution.txt", search_algorithms["uniform_cost_search"][1])
 solution_output.write_solutions("gbfs-h1_solution.txt", search_algorithms["greedy_best_search_h1"][1])
 solution_output.write_solutions("gbfs-h2_solution.txt", search_algorithms["greedy_best_search_h2"][1])
-solution_output.write_solutions("astar-h1_solution", search_algorithms["a_star_search_h1"][1])
-solution_output.write_solutions("astar-h2_solution", search_algorithms["a_star_search_h2"][1])
+solution_output.write_solutions("astar-h1_solution.txt", search_algorithms["a_star_search_h1"][1])
+solution_output.write_solutions("astar-h2_solution.txt", search_algorithms["a_star_search_h2"][1])
 
 solution_output.write_search("ucs_search.txt", search_algorithms["uniform_cost_search"][1])
 solution_output.write_search("gbfs-h1_search.txt", search_algorithms["greedy_best_search_h1"][1])

@@ -77,7 +77,7 @@ class SolutionOutput:
             decimal.getcontext().rounding = decimal.ROUND_DOWN
             for node_count in range(len(nodes)):
                 current_board = nodes[node_count].tiles_to_flat_list()
-                row = str(nodes[node_count].g + nodes[node_count].h) + " " + str(costs[node_count]) + " " + str(nodes[node_count].h) + " "
+                row = str(nodes[node_count].g + nodes[node_count].h) + " " + str(nodes[node_count].g) + " " + str(nodes[node_count].h) + " "
                 for j in range(len(current_board)):
                     row = row + str(current_board[j]) + " "
                 row = row + "\n"

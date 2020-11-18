@@ -49,7 +49,7 @@ for puzzle in puzzles:
     for search_algorithm in search_algorithms:
         print("Evaluated by: " + search_algorithm)
         puzzle_board = Board(rows=puzzle_rows, columns=puzzle_columns, initializing_input_data=puzzle)
-        solution = search_algorithms[search_algorithm][0].solve(puzzle_board)
+        solution = search_algorithms[search_algorithm][0].solve_timed(puzzle_board)
         search_algorithms[search_algorithm][1].append(solution)
 
 print("woah!")

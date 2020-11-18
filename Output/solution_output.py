@@ -75,10 +75,9 @@ class SolutionOutput:
                 continue
             nodes, costs = self.find_path(puzzles[i])
             decimal.getcontext().rounding = decimal.ROUND_DOWN
-            f, h = puzzles[i].f, puzzles[i].h
             for node_count in range(len(nodes)):
                 current_board = nodes[node_count].tiles_to_flat_list()
-                row = str(f) + " " + str(costs[node_count]) + " " + str(h) + " "
+                row = str(nodes[node_count].f) + " " + str(costs[node_count]) + " " + str(nodes[node_count].h) + " "
                 for j in range(len(current_board)):
                     row = row + str(current_board[j]) + " "
                 row = row + "\n"

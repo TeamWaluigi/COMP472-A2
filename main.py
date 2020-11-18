@@ -11,8 +11,8 @@ from board import Board
 
 puzzle_file_path = "Input\Puzzles\Puzzles.txt"
 puzzle_rows = 3
-puzzle_columns = 4
-total_puzzles = 8  # TODO set to 50
+puzzle_columns = 3
+total_puzzles = 20  # TODO set to 50
 time_out_value = 180.0
 # time_out_value = sys.float_info.max
 

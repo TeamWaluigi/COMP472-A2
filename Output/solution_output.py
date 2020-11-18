@@ -117,7 +117,7 @@ class SolutionOutput:
         total_execution_time = 0.0
         for time in self.execution_times:
             total_execution_time += time
-        average_execution_time = time / len(self.execution_times)
+        average_execution_time = total_execution_time / len(self.execution_times)
 
         if "ucs" in unique_name :
             self.optimal_cost = total_cost

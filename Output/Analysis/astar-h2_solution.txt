@@ -1,13 +1,13 @@
-Total Solution Path Size : 9923
-Average Solution Path Size : 198.46
+Total Solution Path Size : 41738
+Average Solution Path Size : 834.76
 Total Puzzles : 50
-Average Length of Search : 11.32
-Total Length of Search : 566
+Average Length of Search : 13.22
+Total Length of Search : 661
 Average Number of No Solutions : 0.0
 Total Number of No Solutions : 0
-Total Cost : 663.0
-Average Cost : 13.26
-Total Execution Time : 2.539726495742798
-Average Execution Time : 0.0016666173934936524
-Optimal Solution Cost : 659.0
-Optimality : 1.0060698027314112
+Total Cost : 773.0
+Average Cost : 15.46
+Total Execution Time : 13.48741102218628
+Average Execution Time : 0.00013962268829345703
+Optimal Solution Cost : 770.0
+Optimality : 1.0038961038961038

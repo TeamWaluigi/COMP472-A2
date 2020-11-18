@@ -10,11 +10,11 @@ from SearchAlgotrithms.uniform_cost_search import UniformCostSearch
 from board import Board
 
 puzzle_file_path = "Input\Puzzles\Puzzles.txt"
-puzzle_rows = 2
-puzzle_columns = 4
+puzzle_rows = 3
+puzzle_columns = 3
 total_puzzles = 50  # TODO set to 50
-time_out_value = 60.0
-# time_out_value = sys.float_info.max
+# time_out_value = 60.0
+time_out_value = sys.float_info.max
 
 # Generate puzzles (If needed)
 generate_puzzles(row=puzzle_rows, column=puzzle_columns, count=total_puzzles)
@@ -28,15 +28,15 @@ search_algorithms = dict()
 uniform_cost_search = UniformCostSearch(time_out=time_out_value)
 search_algorithms["uniform_cost_search"] = [uniform_cost_search, []]
 # GreedyBestSearch
-greedy_best_search_h0 = GreedyBestSearch(time_out=time_out_value)  # Default is h0
-search_algorithms["greedy_best_search_h0"] = [greedy_best_search_h0, []]
+# greedy_best_search_h0 = GreedyBestSearch(time_out=time_out_value)  # Default is h0
+# search_algorithms["greedy_best_search_h0"] = [greedy_best_search_h0, []]
 greedy_best_search_h1 = GreedyBestSearch(heuristic_func=h1, time_out=time_out_value)
 search_algorithms["greedy_best_search_h1"] = [greedy_best_search_h1, []]
 greedy_best_search_h2 = GreedyBestSearch(heuristic_func=h2, time_out=time_out_value)
 search_algorithms["greedy_best_search_h2"] = [greedy_best_search_h2, []]
 # AStarSearch
-a_star_search_h0 = AStarSearch(time_out=time_out_value)  # Default is h0
-search_algorithms["a_star_search_h0"] = [a_star_search_h0, []]
+# a_star_search_h0 = AStarSearch(time_out=time_out_value)  # Default is h0
+# search_algorithms["a_star_search_h0"] = [a_star_search_h0, []]
 a_star_search_h1 = AStarSearch(heuristic_func=h1, time_out=time_out_value)
 search_algorithms["a_star_search_h1"] = [a_star_search_h1, []]
 a_star_search_h2 = AStarSearch(heuristic_func=h2, time_out=time_out_value)

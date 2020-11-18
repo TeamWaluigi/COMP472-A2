@@ -10,10 +10,10 @@ from SearchAlgotrithms.uniform_cost_search import UniformCostSearch
 from board import Board
 
 puzzle_file_path = "Input\Puzzles\Puzzles.txt"
-puzzle_rows = 2
+puzzle_rows = 3
 puzzle_columns = 4
-total_puzzles = 50  # TODO set to 50
-time_out_value = 60.0
+total_puzzles = 8  # TODO set to 50
+time_out_value = 180.0
 # time_out_value = sys.float_info.max
 
 # Generate puzzles (If needed)

@@ -23,6 +23,7 @@ class SearchAlgorithmInterface:
         print("--Search time:-------------")
         execution_time = end - start
         print(execution_time)
-        solved_board.execution_time = execution_time
+        if solved_board is not None:
+            solved_board.execution_time = execution_time
         return solved_board
 
